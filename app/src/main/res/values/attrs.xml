@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+    <declare-styleable name="SegmentTableLayout">
+        <attr name="texts" format="string" />
+    </declare-styleable>
+    -->
+    <declare-styleable name="TabView">
+        <attr name="tab_texts" format="string" />
+        <attr name="tab_verticalGap" format="dimension|reference" />
+        <attr name="tab_textSize" format="dimension|reference" />
+        <attr name="tab_textSelectColor" format="color|reference" />
+        <attr name="tab_borderColor" format="color|reference" />
+        <attr name="tab_borderWidth" format="dimension|reference" />
+        <attr name="tab_showNotice" format="boolean" />
+    </declare-styleable>
+
+    <!--
+    texts:文字中间使用 | 隔开
+    horizonGap：水平的文字的连边的间隔
+    verticalGap：竖直的文字的连边的间隔
+    textColor：选中的文字颜色
+    lineBorder：边框的宽度
+    lineBorderColor：边框的颜色
+    -->
+    <declare-styleable name="ItemTableView">
+        <attr name="it_texts" format="string" />
+        <attr name="it_horizonGap" format="dimension|reference" />
+        <attr name="it_verticalGap" format="dimension|reference" />
+        <attr name="it_textSize" format="dimension|reference" />
+        <attr name="it_textColor" format="color|reference" />
+        <attr name="it_lineBorderColor" format="color|reference" />
+        <attr name="it_lineBorder" format="dimension|reference" />
+    </declare-styleable>
+
+</resources>
