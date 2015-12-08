@@ -5,26 +5,12 @@
               android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <com.botpy.demo.widget.ItemTableView
+        android:id="@+id/item_table_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Hello World!"/>
-
-        <com.botpy.demo.widget.ItemTableView
-            android:id="@+id/item_table_view"
-            app:it_textSize="14sp"
-            app:it_texts="基本|车辆|保险"
-            app:it_verticalGap="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@id/button"
-            android:background="@android:color/white"/>
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:background="@android:color/white"
+        app:it_textSize="14sp"
+        app:it_texts="基本|车辆|保险"
+        app:it_verticalGap="5dp"/>
 </LinearLayout>

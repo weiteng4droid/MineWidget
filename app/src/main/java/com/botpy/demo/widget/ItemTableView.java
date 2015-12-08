@@ -20,8 +20,6 @@ import com.botpy.demo.R;
  */
 public class ItemTableView extends View{
 
-    private static final String TAG = ItemTableView.class.getSimpleName();
-
     private String[] mTexts;
 
     private Rect[] mCacheBounds;
@@ -34,9 +32,6 @@ public class ItemTableView extends View{
 
     private int mHorizonGap;
     private int mVerticalGap;
-
-    private int mChildrenWidth;
-    private int mChildrenHeight;
 
     private int mColors;
     private int mBorderColor;
@@ -214,9 +209,6 @@ public class ItemTableView extends View{
                 mCacheBounds[i].right =  mCacheBounds[i].left + mSingleChildWidth;
                 mCacheBounds[i].bottom = mSingleChildHeight;
             }
-
-            mChildrenHeight = mSingleChildHeight;
-            mChildrenWidth = mSingleChildWidth * mTexts.length;
         }else{
             width = widthMode == MeasureSpec.UNSPECIFIED ? 0 : widthSize;
             height = heightMode == MeasureSpec.UNSPECIFIED ? 0 : heightSize;
@@ -290,6 +282,5 @@ public class ItemTableView extends View{
                 canvas.drawText(mTexts[x], rect.left + (mSingleChildWidth - mTextBounds[x].width()) / 2, rect.top + ((mSingleChildHeight + mTextBounds[x].height()) / 2), mPaint);
             }
         }
-
     }
 }

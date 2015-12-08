@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 
 import com.botpy.demo.interf.BaseFragmentInterface;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by weiTeng on 2015/12/7.
  */
@@ -38,6 +40,7 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentInter
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        ButterKnife.inject(this, view);
         initView(view);
     }
 
