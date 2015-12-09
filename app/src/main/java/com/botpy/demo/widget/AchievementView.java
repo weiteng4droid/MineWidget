@@ -71,6 +71,10 @@ public class AchievementView extends View {
 		}
 		String temp = "100";
 		mTextPaint.getTextBounds(temp, 0, temp.length(), mTempTextBound);
+
+		if(mChartModels == null){
+			mChartModels = new ArrayList<>();
+		}
 	}
 
 	public void setTextSize(int textSize){
@@ -103,9 +107,7 @@ public class AchievementView extends View {
 		if(models == null || models.size() == 0){
 			return;
 		}
-		if(mDefaultCount <= models.size()){
-			mDefaultCount = models.size();
-		}
+
 		mChartModels.clear();
 		mChartModels.addAll(models);
 		requestLayout();
@@ -182,15 +184,15 @@ public class AchievementView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		if(mChartModels.size() > 0) {
+			for (int i = 0; i < mVehicleBounds.length; i++) {
+				ChartModel model = mChartModels.get(i);
+				mPaint.setColor(Color.parseColor(model.color));
+				canvas.drawRect(mVehicleBounds[i], mPaint);
 
-		for (int i = 0; i < mVehicleBounds.length; i++) {
-			ChartModel model = mChartModels.get(i);
-			mPaint.setColor(Color.parseColor(model.color));
-			canvas.drawRect(mVehicleBounds[i], mPaint);
-
-			canvas.drawText(model.text, mVehicleBounds[i].left + (mVehicleBounds[i].width() - mTextBounds[i].width()) / 2, mVehicleBounds[i].top - mTextBounds[i].height() / 4, mTextPaint);
+				canvas.drawText(model.text, mVehicleBounds[i].left + (mVehicleBounds[i].width() - mTextBounds[i].width()) / 2, mVehicleBounds[i].top - mTextBounds[i].height() / 4, mTextPaint);
+			}
 		}
-
 		mPaint.setColor(0xff0000ff);
 		canvas.drawLine(mCacheBound.left - getPaddingLeft(), mCacheBound.bottom, mCacheBound.right + getPaddingRight(), mCacheBound.bottom, mPaint);
 	}
