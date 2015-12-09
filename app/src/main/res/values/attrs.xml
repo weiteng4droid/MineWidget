@@ -34,4 +34,8 @@
         <attr name="it_lineBorder" format="dimension|reference" />
     </declare-styleable>
 
+    <declare-styleable name="AchievementView">
+        <attr name="achievement_textColor" format="color|reference" />
+        <attr name="achievement_textSize" format="dimension|reference" />
+    </declare-styleable>
 </resources>

@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
 import com.botpy.demo.R;
 
@@ -20,7 +21,7 @@ import com.botpy.demo.R;
  * @since 15/7/30.
  * @version v1.0.0
  */
-public class ClearEditText extends AppCompatEditText implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher{
+public class ClearEditText extends EditText implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher{
 
     private Drawable mClearTextIcon;
     private OnFocusChangeListener mOnFocusChangeListener;

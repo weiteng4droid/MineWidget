@@ -43,9 +43,9 @@ public class TabView extends View {
     private int mBorderWidth;
     private int mBorderColor;
     private int mSelectColor;
-    private int mNoticeColor = 0xffff00ff;
+    private int mNoticeColor = 0xffff0000;
 
-    private int mPointRadius = 8;
+    private int mPointRadius = 10;
     private int mDrawableWidth = 56;
     private Paint mBorderPaint;
     private Paint mPaint;

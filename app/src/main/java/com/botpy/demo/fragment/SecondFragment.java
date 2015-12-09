@@ -6,6 +6,9 @@ import android.view.View;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
+import com.botpy.demo.widget.ClearEditText;
+
+import butterknife.InjectView;
 
 /**
  * Created by weiTeng on 2015/12/7.
@@ -13,6 +16,9 @@ import com.botpy.demo.base.BaseFragment;
 public class SecondFragment extends BaseFragment {
 
     private static final String TAG = "SecondFragment";
+
+    @InjectView(R.id.clear_et)
+    ClearEditText mClearEditText;
 
     @Override
     protected int getLayoutId() {

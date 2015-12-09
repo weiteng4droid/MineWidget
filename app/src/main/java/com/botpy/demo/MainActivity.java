@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabClic
                 R.mipmap.home_service_selected,
                 R.mipmap.home_me_seleted);
 
+        mTabview.setDrawableWidth(80);
         mTabview.setCurrentIndex(mIndex);
         mTabview.setOnTabClickListener(this);
         mTabview.showNoticePoint(true);
