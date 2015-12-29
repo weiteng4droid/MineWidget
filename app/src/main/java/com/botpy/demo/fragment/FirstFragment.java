@@ -3,10 +3,13 @@ package com.botpy.demo.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
 import com.botpy.demo.widget.ItemTableView;
+import com.botpy.demo.widget.StarImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,6 +23,10 @@ public class FirstFragment extends BaseFragment {
 
     @InjectView(R.id.item_table_view)
     ItemTableView mItemTableView;
+    @InjectView(R.id.edittext)
+    EditText mEditText;
+    @InjectView(R.id.star_siv)
+    StarImageView mStarImageView;
 
     @Override
     protected int getLayoutId() {
@@ -34,6 +41,18 @@ public class FirstFragment extends BaseFragment {
             @Override
             public void onSegmentIitemClick(int index) {
                 Log.d(TAG, " FirstFragment : index = " + index);
+            }
+        });
+        mStarImageView.setOnLikeListener(new StarImageView.OnLikeListener() {
+
+            @Override
+            public void liked() {
+                Toast.makeText(mActivity, "点赞", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void unLiked() {
+                Toast.makeText(mActivity, "不点赞", Toast.LENGTH_SHORT).show();
             }
         });
     }

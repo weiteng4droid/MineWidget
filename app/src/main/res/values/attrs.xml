@@ -38,4 +38,11 @@
         <attr name="achievement_textColor" format="color|reference" />
         <attr name="achievement_textSize" format="dimension|reference" />
     </declare-styleable>
+
+
+    <declare-styleable name="StarImageView">
+        <attr name="icon_normal" format="reference" />
+        <attr name="icon_selected" format="reference" />
+        <attr name="icon_lined" format="boolean" />
+    </declare-styleable>
 </resources>

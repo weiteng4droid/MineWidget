@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabClic
                 R.mipmap.home_service_selected,
                 R.mipmap.home_me_seleted);
 
-        mTabview.setDrawableWidth(80);
+        mTabview.setDrawableWidth(getResources().getDimensionPixelOffset(R.dimen.w_dp_28));
         mTabview.setCurrentIndex(mIndex);
         mTabview.setOnTabClickListener(this);
         mTabview.showNoticePoint(true);
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabClic
     public void onTabClick(int index) {
         mIndex = index;
         switchContent(mFragments.get(mIndex));
+
     }
 
     public void switchContent(BaseFragment to) {

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
 
     <com.botpy.demo.widget.ItemTableView
@@ -13,4 +14,24 @@
         app:it_textSize="14sp"
         app:it_texts="基本|车辆|保险"
         app:it_verticalGap="5dp"/>
+
+    <EditText
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="请输入车牌号码"
+        android:text="我的文本"
+        android:textSize="15sp"/>
+
+    <com.botpy.demo.widget.StarImageView
+        android:id="@+id/star_siv"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="100dp"
+        app:icon_lined="false"
+        app:icon_normal="@drawable/star_off"
+        app:icon_selected="@drawable/star_on" />
+
 </LinearLayout>

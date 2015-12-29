@@ -101,12 +101,12 @@ public class CircleDrawable extends Drawable {
 
     @Override
     public void setAlpha(int alpha) {
-
+        mPaint.getAlpha();
     }
 
     @Override
     public void setColorFilter(ColorFilter cf) {
-
+        mPaint.getColorFilter();
     }
 
     @Override
