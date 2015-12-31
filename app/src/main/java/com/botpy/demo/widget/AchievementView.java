@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 
 import com.botpy.demo.R;
 import com.botpy.demo.model.ChartModel;
@@ -25,7 +27,7 @@ public class AchievementView extends View {
 
 	private int mBarWidth = 50;
 	private int mBarGap = 20;
-	private int mDefaultCount = 4;
+	private int mDefaultCount = 4;	// 默认四个小柱子
 	private int mMaxHeight = 100;	// 柱状图的最小高度（如果设置不精确的测量模式，就是用该高度）
 	private int mChartUnit = 100;	// 图表的单位数据
 
@@ -34,15 +36,17 @@ public class AchievementView extends View {
 	private Rect mCacheBound;		// 最大区域的边界
 	private Rect mTempTextBound;	// 临时文字的边界
 
-
 	private int mTextSize;
 	private int mTextColor;
 
 	private Paint mPaint;
 	private Paint mTextPaint;
 
-
 	private ArrayList<ChartModel> mChartModels;
+	private AchievementAnimation mAnimation;
+	private long mDefaultDuration = 2000;
+	private float[] mItemHights = new float[mDefaultCount];
+	private String[] mTexts = new String[mDefaultCount];
 
 	public AchievementView(Context context) {
 		this(context, null);
@@ -75,6 +79,15 @@ public class AchievementView extends View {
 		if(mChartModels == null){
 			mChartModels = new ArrayList<>();
 		}
+		mAnimation = new AchievementAnimation();
+		mAnimation.setDuration(mDefaultDuration);
+	}
+
+	public void setAnimaDuration(long duration){
+		if(mDefaultDuration != duration){
+			mDefaultDuration = duration;
+			mAnimation.setDuration(mDefaultDuration);
+		}
 	}
 
 	public void setTextSize(int textSize){
@@ -87,6 +100,7 @@ public class AchievementView extends View {
 		if(mTextSize != textSize){
 			mTextSize = textSize;
 			requestLayout();
+			startAnimation(mAnimation);
 		}
 	}
 
@@ -94,6 +108,7 @@ public class AchievementView extends View {
 		if(mTextColor != textColor){
 			mTextColor = textColor;
 			invalidate();
+			startAnimation(mAnimation);
 		}
 	}
 
@@ -111,6 +126,7 @@ public class AchievementView extends View {
 		mChartModels.clear();
 		mChartModels.addAll(models);
 		requestLayout();
+		startAnimation(mAnimation);
 	}
 
 
@@ -187,13 +203,29 @@ public class AchievementView extends View {
 		if(mChartModels.size() > 0) {
 			for (int i = 0; i < mVehicleBounds.length; i++) {
 				ChartModel model = mChartModels.get(i);
-				mPaint.setColor(Color.parseColor(model.color));
-				canvas.drawRect(mVehicleBounds[i], mPaint);
-
-				canvas.drawText(model.text, mVehicleBounds[i].left + (mVehicleBounds[i].width() - mTextBounds[i].width()) / 2, mVehicleBounds[i].top - mTextBounds[i].height() / 4, mTextPaint);
+				mPaint.setColor(model.color);
+				Rect rectangle = mVehicleBounds[i];
+				canvas.drawRect(rectangle.left, mItemHights[i], rectangle.right, rectangle.bottom, mPaint);
+				mTextPaint.getTextBounds(mTexts[i], 0, mTexts[i].length(), mTempTextBound);
+				canvas.drawText(mTexts[i], mVehicleBounds[i].left + (rectangle.width() - mTempTextBound.width()) / 2, mItemHights[i] - mTextBounds[i].height() / 4, mTextPaint);
 			}
 		}
 		mPaint.setColor(0xff0000ff);
 		canvas.drawLine(mCacheBound.left - getPaddingLeft(), mCacheBound.bottom, mCacheBound.right + getPaddingRight(), mCacheBound.bottom, mPaint);
+	}
+
+	private class AchievementAnimation extends Animation {
+
+		@Override
+		protected void applyTransformation(float interpolatedTime, Transformation t) {
+			super.applyTransformation(interpolatedTime, t);
+			if(interpolatedTime <= 1.0f){
+				for (int i = 0; i < mVehicleBounds.length; i++) {
+					mItemHights[i] = mVehicleBounds[i].bottom - mVehicleBounds[i].height() * interpolatedTime;
+					mTexts[i] = String.valueOf((int)(Integer.parseInt(mChartModels.get(i).text) * interpolatedTime));
+				}
+			}
+			postInvalidate();
+		}
 	}
 }
