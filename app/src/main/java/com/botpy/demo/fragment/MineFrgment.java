@@ -1,5 +1,6 @@
 package com.botpy.demo.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,10 +31,10 @@ public class MineFrgment extends BaseFragment {
     public void initView(View view) {
 
         ArrayList<ChartModel> models = new ArrayList<>();
-        models.add(new ChartModel("100", "#f76450"));
-        models.add(new ChartModel("34", "#f78750"));
-        models.add(new ChartModel("65", "#ffae22"));
-        models.add(new ChartModel("51", "#ffcc00"));
+        models.add(new ChartModel("100", Color.parseColor("#f76450")));
+        models.add(new ChartModel("34", Color.parseColor("#f78750")));
+        models.add(new ChartModel("65", Color.parseColor("#ffae22")));
+        models.add(new ChartModel("51", Color.parseColor("#ffcc00")));
         mAchievement.setChartModels(models);
     }
 

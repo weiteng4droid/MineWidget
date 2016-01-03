@@ -30,8 +30,26 @@
         android:layout_height="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="100dp"
-        app:icon_lined="false"
-        app:icon_normal="@drawable/star_off"
-        app:icon_selected="@drawable/star_on" />
+        app:liked="false"
+        app:state_drawables="@drawable/star_selector" />
+
+    <com.botpy.demo.widget.FrameTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="中国"
+        android:textSize="18sp"
+        app:frame_width="2px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:textColor="@android:color/holo_green_light"/>
+
+    <com.botpy.demo.widget.GradientTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="北京博派通达科技有限公司"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp" />
 
 </LinearLayout>

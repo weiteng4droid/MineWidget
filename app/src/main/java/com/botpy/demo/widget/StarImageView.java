@@ -2,7 +2,7 @@ package com.botpy.demo.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -16,10 +16,9 @@ public class StarImageView extends ImageView {
 
     private static final String TAG = "StarImageView";
 
-    private Drawable mNormalDrawable;
-    private Drawable mSelectedDrawable;
+    private StateListDrawable mDrawable;
 
-    private boolean mLinked;
+    private boolean mLiked;
 
     public interface OnLikeListener {
         void liked();
@@ -43,24 +42,23 @@ public class StarImageView extends ImageView {
     public StarImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StarImageView);
-        mNormalDrawable = ta.getDrawable(R.styleable.StarImageView_icon_normal);
-        mSelectedDrawable = ta.getDrawable(R.styleable.StarImageView_icon_selected);
-        mLinked = ta.getBoolean(R.styleable.StarImageView_icon_lined, false);
+        mDrawable = (StateListDrawable) ta.getDrawable(R.styleable.StarImageView_state_drawables);
+        mLiked = ta.getBoolean(R.styleable.StarImageView_liked, false);
         ta.recycle();
-
         initStarView();
     }
 
     private void initStarView() {
-        if(mSelectedDrawable == null || mNormalDrawable == null){
-            throw new IllegalArgumentException("未设置状态图片");
+        if(mDrawable == null){
+            throw new IllegalArgumentException("未设置状态图片选择器");
         }
+        setImageDrawable(mDrawable);
         switchState(false);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mLinked = !mLinked;
+        mLiked = !mLiked;
         switchState(true);
         return super.onTouchEvent(event);
     }
@@ -70,18 +68,18 @@ public class StarImageView extends ImageView {
     }
 
     public void setCheckState(boolean checked, boolean tiger){
-        if(mLinked != checked){
-            mLinked = checked;
+        if(mLiked != checked){
+            mLiked = checked;
             switchState(tiger);
         }
     }
 
     private void switchState(boolean tiger){
-        if(mLinked){
-            setImageDrawable(mSelectedDrawable);
+        if(mLiked){
+            mDrawable.setState(new int[]{android.R.attr.state_checked});
             if(tiger && mOnLikeListener != null) mOnLikeListener.liked();
         }else{
-            setImageDrawable(mNormalDrawable);
+            mDrawable.setState(new int[]{-android.R.attr.state_checked});
             if(tiger && mOnLikeListener != null) mOnLikeListener.unLiked();
         }
     }

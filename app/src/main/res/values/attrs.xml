@@ -39,10 +39,24 @@
         <attr name="achievement_textSize" format="dimension|reference" />
     </declare-styleable>
 
+    <!--
+    state_drawables: 选择器图片
+    icon_liked:默认是否选中
 
+    -->
     <declare-styleable name="StarImageView">
-        <attr name="icon_normal" format="reference" />
-        <attr name="icon_selected" format="reference" />
-        <attr name="icon_lined" format="boolean" />
+        <attr name="state_drawables" format="reference" />
+        <attr name="liked" format="boolean" />
+    </declare-styleable>
+
+    <!--
+    frame_width：边框的宽度
+    frame_color：边框的颜色
+    frame_round_radius：圆角的大小
+    -->
+    <declare-styleable name="FrameTextView">
+        <attr name="frame_width" format="dimension|reference"/>
+        <attr name="frame_color" format="color|reference"/>
+        <attr name="frame_round_radius" format="dimension|reference"/>
     </declare-styleable>
 </resources>
