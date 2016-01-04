@@ -36,7 +36,7 @@
     <com.botpy.demo.widget.FrameTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="中国"
+        android:text="平安保险"
         android:textSize="18sp"
         app:frame_width="2px"
         android:layout_marginLeft="10dp"
@@ -45,6 +45,7 @@
         android:textColor="@android:color/holo_green_light"/>
 
     <com.botpy.demo.widget.GradientTextView
+        android:id="@+id/gradient_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="北京博派通达科技有限公司"

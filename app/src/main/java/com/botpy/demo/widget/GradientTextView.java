@@ -15,10 +15,11 @@ import android.widget.TextView;
  */
 public class GradientTextView extends TextView{
 
-    private int mViewWidth;
     private Paint mPaint;
     private LinearGradient mLinearGradient;
     private Matrix mGradientMatrix;
+
+    private int mViewWidth;
     private int mTranslate;
 
     public GradientTextView(Context context) {
@@ -40,8 +41,7 @@ public class GradientTextView extends TextView{
             mViewWidth = getMeasuredWidth();
             if(mViewWidth > 0){
                 mPaint = new Paint();
-                mLinearGradient = new LinearGradient(0, 0, mViewWidth, 0, new int[]{Color.BLUE, 0xffffff, Color.BLUE},
-                        null, Shader.TileMode.CLAMP);
+                mLinearGradient = new LinearGradient(0, 0, mViewWidth, 0, new int[]{Color.BLUE, 0xffffff, Color.BLUE}, null, Shader.TileMode.CLAMP);
                 mPaint.setShader(mLinearGradient);
                 mGradientMatrix = new Matrix();
             }

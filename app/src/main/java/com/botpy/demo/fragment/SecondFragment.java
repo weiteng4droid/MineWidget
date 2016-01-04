@@ -17,9 +17,6 @@ public class SecondFragment extends BaseFragment {
 
     private static final String TAG = "SecondFragment";
 
-    @InjectView(R.id.clear_et)
-    ClearEditText mClearEditText;
-
     @Override
     protected int getLayoutId() {
         return R.layout.layout_fragment_second;

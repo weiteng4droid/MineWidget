@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
+import com.botpy.demo.widget.GradientTextView;
 import com.botpy.demo.widget.ItemTableView;
 import com.botpy.demo.widget.StarImageView;
 
@@ -27,6 +28,9 @@ public class FirstFragment extends BaseFragment {
     EditText mEditText;
     @InjectView(R.id.star_siv)
     StarImageView mStarImageView;
+
+    @InjectView(R.id.gradient_tv)
+    GradientTextView mGradientTextView;
 
     @Override
     protected int getLayoutId() {
@@ -55,6 +59,8 @@ public class FirstFragment extends BaseFragment {
                 Toast.makeText(mActivity, "不点赞", Toast.LENGTH_SHORT).show();
             }
         });
+
+        mGradientTextView.setText("中华人共和国万岁");
     }
 
     @Override

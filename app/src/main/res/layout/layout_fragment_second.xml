@@ -2,24 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@mipmap/user_guid_1"
               android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="第二个fragment"
-        android:textSize="20sp"/>
-
-    <com.botpy.demo.widget.ClearEditText
-        android:id="@+id/clear_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textSize="15sp"
-        android:singleLine="true"
-        android:hint="请输入用户名"/>
+   <com.botpy.demo.widget.SnowView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
 
 </LinearLayout>

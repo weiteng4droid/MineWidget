@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
@@ -57,10 +58,10 @@ public class FrameTextView extends TextView {
         }
     }
 
-    public void setFrameColor(int frameColor){
+    public void setFrameColor(@ColorRes int frameColor){
         if(mFrameColor != frameColor){
             mFrameColor = frameColor;
-            mPaint.setColor(mFrameColor);
+            mPaint.setColor(getResources().getColor(mFrameColor));
             invalidate();
         }
     }
