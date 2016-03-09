@@ -19,4 +19,34 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         app:achievement_textSize="11sp"/>
+
+
+    <com.botpy.demo.widget.IconTextView
+        android:id="@+id/icon_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="4dp"
+        app:itv_gap="4dp"
+        app:itv_direction="TOP"
+        app:itv_icon="@drawable/star_on"
+        app:itv_iconHeight="20dp"
+        app:itv_iconWidth="20dp"
+        app:itv_textSize="13sp"
+        app:itv_text="点赞" />
+
+
+    <com.botpy.demo.widget.HorizontalTestLayout
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="#ff00ff">
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:text="内容区域"
+            android:background="#ff0"/>
+
+    </com.botpy.demo.widget.HorizontalTestLayout>
+
 </LinearLayout>

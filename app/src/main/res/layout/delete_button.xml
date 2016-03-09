@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button android:id="@+id/delete_button"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除"
+        android:textColor="#38c4f2"
+        android:background="#f3c3f3">
+
+</Button>

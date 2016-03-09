@@ -1,5 +1,6 @@
-package com.botpy.demo.fragment;
+package com.botpy.demo.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,11 +9,11 @@ import android.widget.Toast;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
+import com.botpy.demo.ui.activity.ScollActivity;
 import com.botpy.demo.widget.GradientTextView;
 import com.botpy.demo.widget.ItemTableView;
 import com.botpy.demo.widget.StarImageView;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -61,6 +62,17 @@ public class FirstFragment extends BaseFragment {
         });
 
         mGradientTextView.setText("中华人共和国万岁");
+        mGradientTextView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startNewActivity();
+            }
+        });
+    }
+
+    private void startNewActivity(){
+        startActivity(new Intent(getActivity(), ScollActivity.class));
     }
 
     @Override

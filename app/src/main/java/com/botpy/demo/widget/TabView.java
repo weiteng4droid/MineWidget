@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.botpy.demo.R;
 public class TabView extends View {
 
     private static final String TAG = "TabView";
+    private static final boolean DEBUG = true;
 
     private Rect[] mCacheBounds;
     private Rect[] mTextsBounds;
@@ -31,14 +34,12 @@ public class TabView extends View {
     private Rect[] mTouchBounds;
 
     private String[] mTexts;
-    private Drawable[] mNormalDrawables;
-    private Drawable[] mSelectedDawables;
+    private StateListDrawable[] mStateListDrawables;
 
-    // 竖直方向图片和文字的间隙
+    // Gap between image and text
     private int mVerticalGap;
     private int mTextSize;
     private int mSingleWidth;
-    private int mSingleHeight;
 
     private int mBorderWidth;
     private int mBorderColor;
@@ -83,12 +84,16 @@ public class TabView extends View {
         if (texts != null) {
             mTexts = texts.split("\\|");
         }
-        mTextSize = ta.getDimensionPixelSize(R.styleable.TabView_tab_textSize, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics()));
-        mVerticalGap = ta.getDimensionPixelSize(R.styleable.TabView_tab_verticalGap, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics()));
-        mBorderWidth = ta.getDimensionPixelSize(R.styleable.TabView_tab_borderWidth, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()));
+        mTextSize = ta.getDimensionPixelSize(R.styleable.TabView_tab_textSize,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics()));
+        mVerticalGap = ta.getDimensionPixelSize(R.styleable.TabView_tab_verticalGap,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics()));
+        mBorderWidth = ta.getDimensionPixelSize(R.styleable.TabView_tab_borderWidth,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics()));
         mBorderColor = ta.getColor(R.styleable.TabView_tab_borderColor, getResources().getColor(android.R.color.darker_gray));
         mSelectColor = ta.getColor(R.styleable.TabView_tab_textSelectColor, 0xff0099cc);
         mShowNotice = ta.getBoolean(R.styleable.TabView_tab_showNotice, false);
+
         ta.recycle();
 
         mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -105,16 +110,17 @@ public class TabView extends View {
             mPosNotices = new boolean[mTexts.length];
         }
 
-        // 图形区域
+        // bounds of drawables
         if(mDrawableBounds == null || mDrawableBounds.length != mTexts.length){
             mDrawableBounds = new Rect[mTexts.length];
         }
-        // 点击区域的矩形
+
+        // ensure touch bounds
         if(mTouchBounds == null || mTouchBounds.length != mTexts.length){
             mTouchBounds = new Rect[mTexts.length];
         }
 
-        // 计算使触摸的位置更加精确
+        // get the real touchSlop
         int touchSlop;
         if(context == null){
             touchSlop = ViewConfiguration.getTouchSlop();
@@ -122,7 +128,7 @@ public class TabView extends View {
             final ViewConfiguration config = ViewConfiguration.get(context);
             touchSlop = config.getScaledTouchSlop();
         }
-        // 最小的滑动距离
+
         mTouchSlop = touchSlop * touchSlop;
         inTapRegion = false;
     }
@@ -139,9 +145,18 @@ public class TabView extends View {
         }
     }
 
+    public void setNoticePointRadius(int pointRadius){
+        if (mPointRadius != pointRadius) {
+            mPointRadius = pointRadius;
+            requestLayout();
+            invalidate();
+        }
+    }
+
     public void setDrawableWidth(int drawableWidth){
         if(mDrawableWidth != drawableWidth){
             mDrawableWidth = drawableWidth;
+            requestLayout();
             invalidate();
         }
     }
@@ -157,14 +172,14 @@ public class TabView extends View {
         }
     }
 
-    public void showNoticePointAtPostion(int postion, boolean toggle){
+    public void showNoticePointAtPosition(int position, boolean toggle){
         if(!mShowNotice){
             return;
         }
-        if(postion >= mTexts.length){
+        if(position >= mTexts.length){
             throw new IndexOutOfBoundsException("超出标签的长度");
         }
-        mPosNotices[postion] = toggle;
+        mPosNotices[position] = toggle;
         invalidate();
     }
 
@@ -172,29 +187,17 @@ public class TabView extends View {
         mTouchClear = tiger;
     }
 
-    public void setNormalDrawables(int... resId){
-        if(resId.length != mTexts.length){
-            throw new IllegalArgumentException("图片长度和文字不符");
+    public void setStateListDrawables(int... resDrawable){
+        if(resDrawable.length != mTexts.length){
+            throw new IllegalArgumentException("图片个数和文本组数不符");
         }
 
-        if(mNormalDrawables == null){
-            mNormalDrawables = new Drawable[mTexts.length];
+        if (mStateListDrawables == null) {
+            mStateListDrawables = new StateListDrawable[mTexts.length];
         }
 
-        for(int x = 0; x < resId.length; x++){
-            mNormalDrawables[x] = getResources().getDrawable(resId[x]);
-        }
-    }
-
-    public void setSelectedDawables(int... resId){
-        if(resId.length != mTexts.length){
-            throw new IllegalArgumentException("图片长度和文字不符");
-        }
-        if(mSelectedDawables == null){
-            mSelectedDawables = new Drawable[mTexts.length];
-        }
-        for(int x = 0; x < resId.length; x++){
-            mSelectedDawables[x] = getResources().getDrawable(resId[x]);
+        for (int i = 0; i < resDrawable.length; i++) {
+            mStateListDrawables[i] = (StateListDrawable) getResources().getDrawable(resDrawable[i]);
         }
     }
 
@@ -208,6 +211,7 @@ public class TabView extends View {
         if(mTextSize != textSize){
             mTextSize = textSize;
             requestLayout();
+            invalidate();
         }
     }
 
@@ -230,6 +234,7 @@ public class TabView extends View {
         if(mBorderWidth != borderWidth){
             mBorderWidth = borderWidth;
             requestLayout();
+            invalidate();
         }
     }
 
@@ -237,7 +242,7 @@ public class TabView extends View {
 
         int horizonGap = (int) ((mSingleWidth - mDrawableWidth) / 2.0f + 0.5);
         drawableRect.left = borderRect.left + horizonGap;
-        drawableRect.top = borderRect.top + mVerticalGap;
+        drawableRect.top = borderRect.top + getPaddingTop();
         drawableRect.right = drawableRect.left + mDrawableWidth;
         drawableRect.bottom = drawableRect.top + mDrawableWidth;
 
@@ -259,55 +264,68 @@ public class TabView extends View {
         if(mCacheBounds == null || mCacheBounds.length != mTexts.length){
             mCacheBounds = new Rect[mTexts.length];
         }
-
         if(mTextsBounds == null || mTextsBounds.length != mTexts.length){
             mTextsBounds = new Rect[mTexts.length];
         }
-        // 设置文字边界
-        for(int i = 0; i < mTexts.length; i++){
-            String itemText = mTexts[i];
-            if(mTextsBounds[i] == null ){
-                mTextsBounds[i] = new Rect();
-            }
-            mPaint.getTextBounds(itemText, 0, itemText.length(), mTextsBounds[i]);
-        }
+        calculateTextBound();
 
-        int width = 0;
-        int height = 0;
+        int width;
+        int height;
+        int realWidth = widthSize - getPaddingLeft() - getPaddingRight();
+        int realHeight = heightSize - getPaddingTop() - getPaddingBottom();
 
-        // 获取临时的最小宽度和高度
+        // def temp width and height
         int tempSingleWidth = 0;
         int tempSingleHeight = 0;
-        if(mNormalDrawables != null && mNormalDrawables.length == mTexts.length) {
-            if (mDrawableWidth > mTextsBounds[0].width()) {
-                tempSingleWidth = mDrawableWidth;
-            } else {
-                tempSingleWidth = mTextsBounds[0].width();
-            }
-            tempSingleHeight = mDrawableWidth + mVerticalGap * 3 + mTextsBounds[0].height();
+
+        if(mStateListDrawables != null && mStateListDrawables.length == mTexts.length) {
+            tempSingleWidth = Math.max(mDrawableWidth, mTextsBounds[0].width());
+            tempSingleHeight = mDrawableWidth + mVerticalGap + mTextsBounds[0].height();
         }
 
-        if(widthMode == MeasureSpec.AT_MOST){
-            if(widthSize <= tempSingleWidth * mTexts.length){
+        // measure width
+        if (widthMode == MeasureSpec.EXACTLY) {
+            width = realWidth;
+            tempSingleWidth = realWidth / mTexts.length;
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            if (realWidth <= tempSingleWidth * mTexts.length) {
                 width = tempSingleWidth * mTexts.length;
-            }else{
-                width = widthSize;
+            } else {
+                width = realWidth;
+                tempSingleWidth = realWidth / mTexts.length;
             }
-        }else if(widthMode == MeasureSpec.EXACTLY){
-            width = widthSize;      // 如果尺寸给的偏小可能会显示不全
-        }else if(widthMode == MeasureSpec.UNSPECIFIED){
-            width = tempSingleWidth * mTexts.length;
+        } else {
+            width = Math.min(tempSingleWidth * mTexts.length, realWidth);
         }
 
-        if(heightMode == MeasureSpec.EXACTLY){
-            height = heightSize;
-        }else {
-            height = tempSingleHeight;
+        // measure height
+        if (heightMode == MeasureSpec.EXACTLY) {
+            tempSingleHeight = height = realHeight;
+
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            if (tempSingleHeight < realHeight) {
+                height = tempSingleHeight;
+            } else {
+                tempSingleHeight = height = realHeight;
+            }
+        } else {
+            height = Math.min(tempSingleHeight, realHeight);
         }
 
-        mSingleWidth = width / mTexts.length;
-        mSingleHeight = height;
+        mSingleWidth = tempSingleWidth;
 
+        if (DEBUG) {
+            Log.d(TAG, "height = " + height);
+            Log.d(TAG, "width = " + width);
+        }
+        calculateBounds(tempSingleHeight);
+        setMeasuredDimension(width + getPaddingRight() + getPaddingLeft(), height + getPaddingTop() + getPaddingBottom());
+    }
+
+    /**
+     * 计算图标的位置和单个item的位置
+     */
+    private void calculateBounds(int tempSingleHeight) {
         for(int i = 0; i < mCacheBounds.length; i++){
             if(mCacheBounds[i] == null){
                 mCacheBounds[i] = new Rect();
@@ -315,24 +333,41 @@ public class TabView extends View {
             if(mDrawableBounds[i] == null){
                 mDrawableBounds[i] = new Rect();
             }
+
             Rect rect = mCacheBounds[i];
             rect.left = i * mSingleWidth;
             rect.top = 0;
             rect.right = rect.left + mSingleWidth;
-            rect.bottom = mSingleHeight;
+            rect.bottom = getPaddingTop() + tempSingleHeight + getPaddingBottom();
 
-            getDrawableBounds(rect, mDrawableBounds[i], mNormalDrawables[i]);
-            getDrawableBounds(rect, mDrawableBounds[i], mSelectedDawables[i]);
+            getDrawableBounds(rect, mDrawableBounds[i], mStateListDrawables[i]);
 
             if(mTouchBounds[i] == null){
                 mTouchBounds[i] = new Rect();
             }
-            mTouchBounds[i].left = mDrawableBounds[i].left - mVerticalGap;
+
+            int touchGap = (mSingleWidth - mDrawableBounds[i].width()) / 3;
+            if (touchGap < mVerticalGap) {
+                touchGap = mVerticalGap;
+            }
+            mTouchBounds[i].left = mDrawableBounds[i].left - touchGap;          // Adjust the range of the area to be clicked
             mTouchBounds[i].top = rect.top + mVerticalGap;
-            mTouchBounds[i].right = mDrawableBounds[i].right + mVerticalGap;
-            mTouchBounds[i].bottom = mDrawableBounds[i].bottom + mVerticalGap + mTextsBounds[i].height();
+            mTouchBounds[i].right = mDrawableBounds[i].right + touchGap;
+            mTouchBounds[i].bottom = mDrawableBounds[i].bottom + mVerticalGap + mTextsBounds[i].height() + getPaddingBottom();
         }
-        setMeasuredDimension(width, height);
+    }
+
+    /**
+     * 计算文字的位置
+     */
+    private void calculateTextBound() {
+        for(int i = 0; i < mTexts.length; i++){
+            String itemText = mTexts[i];
+            if(mTextsBounds[i] == null ){
+                mTextsBounds[i] = new Rect();
+            }
+            mPaint.getTextBounds(itemText, 0, itemText.length(), mTextsBounds[i]);
+        }
     }
 
     @Override
@@ -359,7 +394,8 @@ public class TabView extends View {
                     int index = mCurrentIndex;
                     for (int i = 0; i < mTouchBounds.length; i++) {
                         Rect touchRect = mTouchBounds[i];
-                        // 如果需要更加精确的时候还需加上Y方向的判断，此View只对水平方向进行判断
+
+                        // If you need more accurate when you need to add the Y direction of the judgment, this View only to determine the level of direction
                         if(mStartX > touchRect.left && mStartX < touchRect.right){
                             index = i;
                             break;
@@ -382,26 +418,30 @@ public class TabView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        // 画上边的一条线
+
         Rect rectFirst = mCacheBounds[0];
         Rect rectLast = mCacheBounds[mTexts.length - 1];
-        canvas.drawLine(rectFirst.left, rectFirst.top, rectLast.right, rectLast.top, mBorderPaint);
-        canvas.drawLine(rectFirst.left, rectFirst.bottom - 1, rectLast.right, rectLast.bottom - 1, mBorderPaint);
+        canvas.drawLine(rectFirst.left, rectFirst.top, rectLast.right, rectLast.top, mBorderPaint);                  // draw top line
+        canvas.drawLine(rectFirst.left, rectFirst.bottom, rectLast.right, rectLast.bottom, mBorderPaint);            // draw bottom line
 
-        Drawable drawable;
+        // draw drawable of item
+        StateListDrawable drawable;
         for(int i = 0; i < mTexts.length; i++) {
+            drawable = mStateListDrawables[i];
             if (i == mCurrentIndex) {
-                drawable = mSelectedDawables[i];
+                drawable.setState(new int[]{android.R.attr.state_checked});
                 mPaint.setColor(mSelectColor);
-            }else{
-                drawable = mNormalDrawables[i];
+            } else {
+                drawable.setState(new int[]{-android.R.attr.state_checked});
                 mPaint.setColor(mBorderColor);
             }
             drawable.draw(canvas);
-            int textOffset = (int) ((mCacheBounds[i].height() - mVerticalGap * 1.5f - mDrawableBounds[i].height() + mTextsBounds[i].height()) / 2.0f + 0.5f);
-            canvas.drawText(mTexts[i], mCacheBounds[i].left + (mSingleWidth - mTextsBounds[i].width()) / 2, mDrawableBounds[i].bottom + textOffset, mPaint);
 
+            // draw text under the drawable
+            float textOffset = (mCacheBounds[i].height() - getPaddingBottom() - mDrawableBounds[i].height() - mVerticalGap) /2 - (mPaint.descent() + mPaint.ascent()) / 2;
+            canvas.drawText(mTexts[i], mCacheBounds[i].left + (mSingleWidth - mTextsBounds[i].width()) / 2, mDrawableBounds[i].bottom + mVerticalGap + textOffset, mPaint);
+
+            // daw red notice point
             if(mShowNotice && mPosNotices[i]) {
                 canvas.drawCircle(mDrawableBounds[i].right, mDrawableBounds[i].top + mPointRadius, mPointRadius, mNoticePaint);
             }

@@ -39,6 +39,7 @@
         <attr name="achievement_textSize" format="dimension|reference" />
     </declare-styleable>
 
+
     <!--
     state_drawables: 选择器图片
     icon_liked:默认是否选中
@@ -48,6 +49,7 @@
         <attr name="state_drawables" format="reference" />
         <attr name="liked" format="boolean" />
     </declare-styleable>
+
 
     <!--
     frame_width：边框的宽度
@@ -59,4 +61,50 @@
         <attr name="frame_color" format="color|reference"/>
         <attr name="frame_round_radius" format="dimension|reference"/>
     </declare-styleable>
+
+
+    <!--
+    IconTextView图标文本控件
+    itv_textSize：文字大小
+    itv_textColor：文字颜色
+    itv_gap：文字和图标之间的间隙
+    itv_direction：方向
+           TOP：上边
+           BOTTOM: 下边
+           LEFT：左边
+           RIGHT：右边
+    itv_icon：图标
+    itv_text：显示的文本
+    itv_iconWidth：图标的宽度
+    itv_iconHight：图标的高度 ，如果不设置宽度和高度的话，默认按照图片的宽度和高度来
+    -->
+    <declare-styleable name="IconTextView">
+        <attr name="itv_textSize" format="dimension|reference"/>
+        <attr name="itv_textColor" format="color|reference"/>
+        <attr name="itv_gap" format="dimension|reference"/>
+        <attr name="itv_direction" >
+            <enum name="TOP" value="0" />
+            <enum name="BOTTOM" value="1" />
+            <enum name="LEFT" value="2" />
+            <enum name="RIGHT" value="3" />
+        </attr>
+        <attr name="itv_icon" format="reference"/>
+        <attr name="itv_text" format="string|reference"/>
+        <attr name="itv_iconWidth" format="dimension|reference"/>
+        <attr name="itv_iconHeight" format="dimension|reference"/>
+    </declare-styleable>
+
+
+    <!--
+    自定义ViewGroup的属性
+    slide_width： 支持拖拽的布局的宽度
+    slide_layout：支持拖拽的布局
+    content_layout: 内容布局
+    -->
+    <declare-styleable name="SlideLayout">
+        <attr name="slide_width" format="dimension|reference"/>
+        <attr name="slide_layout" format="reference" />
+        <attr name="content_layout" format="reference"/>
+    </declare-styleable>
+    
 </resources>

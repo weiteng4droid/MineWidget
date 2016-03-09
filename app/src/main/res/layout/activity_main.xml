@@ -13,8 +13,10 @@
         android:background="@android:color/white"
         app:tab_showNotice="true"
         app:tab_texts="车险|消息|客户|我"
-        app:tab_verticalGap="5dp"
+        app:tab_verticalGap="2dp"
         app:tab_borderWidth="0.5dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         app:tab_textSize="13sp" />
 
     <FrameLayout

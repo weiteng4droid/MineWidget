@@ -9,7 +9,9 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
 /**
- * Created by weiTeng on 15/12/19.
+ * 左边有个小圆角凸出
+ *
+ * @author weiTeng on 15/12/19.
  */
 public class ItemBackgroundDrawable extends Drawable {
 

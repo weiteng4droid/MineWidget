@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <com.botpy.demo.widget.HorizontalSlideLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#ff00ff">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#0f0">
+
+            <TextView
+                android:id="@+id/text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:gravity="left|center_vertical"
+                android:text="测试测试测试"
+                android:textColor="#000"/>
+
+            <TextView
+                android:id="@+id/text_view2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/text_view"
+                android:gravity="left|center_vertical"
+                android:text="测试测试测试"
+                android:textColor="#000"/>
+
+            <TextView
+                android:id="@+id/text_view3"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/text_view2"
+                android:gravity="left|center_vertical"
+                android:text="测试测试测试"
+                android:textColor="#000"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/clear_data"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:background="#0ff"
+            android:gravity="center"
+            android:text="删除"/>
+
+    </com.botpy.demo.widget.HorizontalSlideLayout>
+
+</LinearLayout>

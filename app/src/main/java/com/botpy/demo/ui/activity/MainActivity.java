@@ -1,15 +1,19 @@
-package com.botpy.demo;
+package com.botpy.demo.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
-import com.botpy.demo.fragment.FirstFragment;
-import com.botpy.demo.fragment.MineFrgment;
-import com.botpy.demo.fragment.SecondFragment;
-import com.botpy.demo.fragment.ThirdFragment;
+import com.botpy.demo.ui.fragment.FirstFragment;
+import com.botpy.demo.ui.fragment.MineFrgment;
+import com.botpy.demo.ui.fragment.SecondFragment;
+import com.botpy.demo.ui.fragment.ThirdFragment;
 import com.botpy.demo.widget.TabView;
 
 import java.util.ArrayList;
@@ -36,25 +40,18 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabClic
         ButterKnife.inject(this);
         mFragmentManager = getSupportFragmentManager();
 
-        mTabview.setNormalDrawables(
-                R.mipmap.home_insruance_normal,
-                R.mipmap.home_msg_normal,
-                R.mipmap.home_service_normal,
-                R.mipmap.home_me_normal);
-        mTabview.setSelectedDawables(
-                R.mipmap.home_insruance_selected,
-                R.mipmap.home_msg_selected,
-                R.mipmap.home_service_selected,
-                R.mipmap.home_me_seleted);
-
+        mTabview.setStateListDrawables(R.drawable.home_insruance_icon, R.drawable.home_msg_icon, R.drawable.home_service_icon, R.drawable.home_mine_icon);
         mTabview.setDrawableWidth(getResources().getDimensionPixelOffset(R.dimen.w_dp_28));
         mTabview.setCurrentIndex(mIndex);
         mTabview.setOnTabClickListener(this);
         mTabview.showNoticePoint(true);
-        mTabview.showNoticePointAtPostion(0, true);
-        mTabview.showNoticePointAtPostion(2, true);
+        mTabview.showNoticePointAtPosition(0, true);
+        mTabview.showNoticePointAtPosition(2, true);
 //        mTabview.clearNoticePointOnTouch(true);
         initAllFragment();
+        LinearLayout linearLayout = new LinearLayout(this);
+        TextView textView = new TextView(this);
+        linearLayout.addView(textView);
     }
 
     private void initAllFragment() {
