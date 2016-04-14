@@ -4,17 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
+import com.botpy.demo.dialog.TFragmentDialog;
 import com.botpy.demo.ui.activity.ScollActivity;
+import com.botpy.demo.ui.activity.TestViewGroupActivity;
+import com.botpy.demo.widget.FrameTextView;
 import com.botpy.demo.widget.GradientTextView;
 import com.botpy.demo.widget.ItemTableView;
 import com.botpy.demo.widget.StarImageView;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by weiTeng on 2015/12/7.
@@ -30,8 +35,14 @@ public class FirstFragment extends BaseFragment {
     @InjectView(R.id.star_siv)
     StarImageView mStarImageView;
 
+    @InjectView(R.id.frame_text_view)
+    FrameTextView mFrameTextView;
+
     @InjectView(R.id.gradient_tv)
     GradientTextView mGradientTextView;
+
+    @InjectView(R.id.show_fragment_dialog)
+    Button mButton;
 
     @Override
     protected int getLayoutId() {
@@ -69,6 +80,14 @@ public class FirstFragment extends BaseFragment {
                 startNewActivity();
             }
         });
+        mFrameTextView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mActivity, TestViewGroupActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void startNewActivity(){
@@ -84,5 +103,11 @@ public class FirstFragment extends BaseFragment {
     public void reloadData() {
         super.reloadData();
         Log.d(TAG, " FirstFragment : reloadData()");
+    }
+
+    @OnClick(R.id.show_fragment_dialog)
+    public void showDialog() {
+        new TFragmentDialog()
+                .show(mActivity.getFragmentManager(), "dialog");
     }
 }

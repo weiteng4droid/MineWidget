@@ -1,23 +1,11 @@
 package com.botpy.demo.ui.fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
-import com.botpy.demo.model.ChartModel;
-import com.botpy.demo.ui.activity.HomeActivity;
-import com.botpy.demo.widget.AchievementView;
-import com.botpy.demo.widget.IconTextView;
-
-import java.util.ArrayList;
-
-import butterknife.InjectView;
 
 /**
  * @author weiTeng on 2015/12/8.

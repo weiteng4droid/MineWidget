@@ -3,7 +3,6 @@ package com.botpy.demo.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -13,7 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 import com.botpy.demo.R;
-import com.botpy.demo.model.ChartModel;
+import com.botpy.demo.ui.model.ChartModel;
 
 import java.util.ArrayList;
 

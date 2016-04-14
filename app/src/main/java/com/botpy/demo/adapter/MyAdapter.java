@@ -34,7 +34,7 @@ public class MyAdapter extends ArrayAdapter<String> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view;  
         if (convertView == null) {  
-            view = LayoutInflater.from(getContext()).inflate(R.layout.item_tlistview, null);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.item_tlistview, parent, false);
         } else {  
             view = convertView;  
         }  

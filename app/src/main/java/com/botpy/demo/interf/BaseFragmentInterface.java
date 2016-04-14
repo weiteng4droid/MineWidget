@@ -10,9 +10,9 @@ public interface BaseFragmentInterface {
 
     void initView(View view);
 
-    void initData(Bundle saveInstaceState);
+    void initData(Bundle saveInstanceState);
 
     void reloadData();
 
-    void relase();
+    void release();
 }

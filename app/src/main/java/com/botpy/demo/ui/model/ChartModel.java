@@ -1,4 +1,4 @@
-package com.botpy.demo.model;
+package com.botpy.demo.ui.model;
 
 public class ChartModel {
 

@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabClic
         ButterKnife.inject(this);
         mFragmentManager = getSupportFragmentManager();
 
-        mTabview.setStateListDrawables(R.drawable.home_insruance_icon, R.drawable.home_msg_icon, R.drawable.home_service_icon, R.drawable.home_mine_icon);
+        mTabview.setStateListDrawables(R.drawable.home_insruance_icon, R.drawable.home_msg_icon,
+                R.drawable.home_service_icon, R.drawable.home_mine_icon);
         mTabview.setDrawableWidth(getResources().getDimensionPixelOffset(R.dimen.w_dp_28));
         mTabview.setCurrentIndex(mIndex);
         mTabview.setOnTabClickListener(this);
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements TabView.OnTabClic
     public void switchContent(BaseFragment to) {
         if (mCurrentFragment != to) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            transaction.addToBackStack(null);
             if (!to.isAdded()) {
                 transaction.hide(mCurrentFragment).add(R.id.contentPanel, to).commit();
             } else {

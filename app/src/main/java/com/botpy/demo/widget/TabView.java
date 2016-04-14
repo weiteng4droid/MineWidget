@@ -54,9 +54,9 @@ public class TabView extends View {
 
     private int mTouchSlop;
 
-    private boolean mShowNotice;        // 是否显示红点
+    private boolean mShowNotice;        // is show notice point
     private boolean mTouchClear;
-    private boolean inTapRegion;        // 是否点击到了
+    private boolean inTapRegion;
     private boolean[] mPosNotices;
 
     private int mStartX;

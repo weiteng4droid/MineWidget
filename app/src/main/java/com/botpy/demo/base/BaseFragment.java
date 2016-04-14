@@ -61,11 +61,11 @@ public abstract class BaseFragment extends Fragment implements BaseFragmentInter
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.reset(this);
-        relase();
+        release();
     }
 
     @Override
-    public void relase() {
+    public void release() {
 
     }
 
