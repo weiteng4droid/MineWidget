@@ -14,7 +14,27 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
+
+    <Button
+        android:id="@+id/put_cache_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/text"
+        android:text="设置缓存"/>
+
+    <Button
+        android:id="@+id/get_cache_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@id/put_cache_btn"
+        android:text="获取缓存"/>
+
+
 </RelativeLayout>

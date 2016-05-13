@@ -107,4 +107,18 @@
         <attr name="content_layout" format="reference"/>
     </declare-styleable>
     
+    <!--
+    自定义的表格控件的属性
+
+    -->
+    <declare-styleable name="SheetView">
+        <attr name="row" format="integer|reference"/>
+        <attr name="column" format="integer|reference"/>
+        <attr name="cell_padding" format="dimension|reference"/>
+        <attr name="border_color" format="color|reference"/>
+        <attr name="border_width" format="dimension|reference"/>
+        <attr name="text_color" format="color|reference" />
+        <attr name="header_background" format="color|reference"/>
+    </declare-styleable>
+    
 </resources>

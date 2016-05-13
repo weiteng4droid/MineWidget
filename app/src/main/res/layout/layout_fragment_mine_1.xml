@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.botpy.demo.widget.HorizontalTestLayout
+        android:id="@+id/container"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="#ff00ff">
@@ -17,5 +18,16 @@
             android:background="#ff0"/>
 
     </com.botpy.demo.widget.HorizontalTestLayout>
+
+    <com.botpy.demo.widget.SheetView
+        android:id="@+id/sheet_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        app:text_color="#ff6200"
+        app:border_color="#0090ff"
+        app:header_background="#FFF6F6F6"
+        app:row="6"
+        app:column="2"/>
 
 </LinearLayout>

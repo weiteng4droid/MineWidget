@@ -14,7 +14,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 /**
  * Created by weiTeng on 2016/4/28.
@@ -33,7 +32,8 @@ public class CacheManager {
 
     public static int getAppVersion(Context context) {
         try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(),
+                    PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -68,10 +68,10 @@ public class CacheManager {
     private static DiskLruCache openDiskLruCache(Context context, String uniqueName) {
         try {
             File cacheDir = getDiskCacheDir(context, uniqueName);
-            if (cacheDir.exists()) {
+            if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
-            return DiskLruCache.open(cacheDir, getAppVersion(context), 1, 8 * 1024 * 1024);
+            return DiskLruCache.open(cacheDir, getAppVersion(context), 1, 2 * 1024 * 1024);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -138,43 +138,9 @@ public class CacheManager {
                     return (T) ois.readObject();
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static <T> void cacheModels(Context context, String key, List<T> models) {
-        try {
-            DiskLruCache diskLruCache = openDiskLruCache(context, "models");
-            if (diskLruCache != null) {
-                DiskLruCache.Editor editor = diskLruCache.edit(hashKeyForDiskCache(key));
-                ObjectOutputStream oos = new ObjectOutputStream(editor.newOutputStream(0));
-                oos.writeObject(models);
-                oos.flush();
-                editor.commit();
-                diskLruCache.flush();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static <T> List<T> getModelsForKey(Context context, String key) {
-        try {
-            DiskLruCache diskLruCache = openDiskLruCache(context, "models");
-            if (diskLruCache != null) {
-                DiskLruCache.Snapshot snapshot = diskLruCache.get(hashKeyForDiskCache(key));
-                if (snapshot != null) {
-                    ObjectInputStream ois = new ObjectInputStream(snapshot.getInputStream(0));
-                    return (List<T>) ois.readObject();
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

@@ -6,6 +6,10 @@ import android.view.View;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
+import com.botpy.demo.widget.SheetView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author weiTeng on 2015/12/8.
@@ -36,6 +40,7 @@ public class MineFrgment extends BaseFragment {
                 startActivity(new Intent(mActivity, HomeActivity.class));
             }
         });*/
+        SheetView sheetView = (SheetView) view.findViewById(R.id.sheet_view);
     }
 
     @Override

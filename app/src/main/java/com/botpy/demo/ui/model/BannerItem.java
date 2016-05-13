@@ -7,4 +7,12 @@ public class BannerItem extends BaseModel {
 
     public String imgUrl;
     public String title;
+
+    @Override
+    public String toString() {
+        return "BannerItem{" +
+                "imgUrl='" + imgUrl + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }
