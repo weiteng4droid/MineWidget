@@ -38,19 +38,7 @@ public class SecondFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        banner = (SimpleImageBanner) view.findViewById(R.id.simple_banner);
-        banner.setSource(DataProvider.getList())
-                .setDelay(4)
-                .setPeriod(4)
-                .startScroll();
 
-        banner.setOnItemClickL(new SimpleImageBanner.OnItemClickL() {
-
-            @Override
-            public void onItemClick(int position) {
-                Toast.makeText(mActivity, "position = " + position, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -79,6 +67,7 @@ public class SecondFragment extends BaseFragment {
         BannerItem bannerItem = CacheManager.getModelForKey(mActivity, "bannerItem");
         if (bannerItem != null) {
             Log.d(TAG, bannerItem.toString());
+            Toast.makeText(mActivity, bannerItem.title, Toast.LENGTH_SHORT).show();
         } else {
             Log.d(TAG, "null");
         }

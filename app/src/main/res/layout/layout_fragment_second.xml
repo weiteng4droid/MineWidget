@@ -5,11 +5,11 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.botpy.demo.ui.banner.SimpleImageBanner
-        android:id="@+id/simple_banner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        banner:bb_scale="0.5625" />
+    <!--<com.botpy.demo.ui.banner.SimpleImageBanner-->
+        <!--android:id="@+id/simple_banner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--banner:bb_scale="0.5625" />-->
 
     <Button
         android:id="@+id/put_cache_btn"

@@ -1,6 +1,7 @@
 package com.botpy.demo.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -25,7 +26,8 @@ public class MineFrgment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-/*
+
+    /*
         ArrayList<ChartModel> models = new ArrayList<>();
         models.add(new ChartModel("100", Color.parseColor("#f76450")));
         models.add(new ChartModel("34", Color.parseColor("#f78750")));
