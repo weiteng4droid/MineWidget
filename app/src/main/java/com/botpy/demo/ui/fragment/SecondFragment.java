@@ -29,8 +29,6 @@ public class SecondFragment extends BaseFragment {
     @InjectView(R.id.get_cache_btn)
     Button mGetCacheButton;
 
-    private SimpleImageBanner banner;
-
     @Override
     protected int getLayoutId() {
         return R.layout.layout_fragment_second;
@@ -50,7 +48,6 @@ public class SecondFragment extends BaseFragment {
     @Override
     public void reloadData() {
         super.reloadData();
-        banner.setSource(DataProvider.reloadListData());
     }
 
     @OnClick(R.id.put_cache_btn)

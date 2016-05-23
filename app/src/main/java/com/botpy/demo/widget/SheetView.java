@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TableView
+ * SheetView
  *
  * Created by weiTeng on 2016/5/12.
  */
@@ -166,7 +166,7 @@ public class SheetView extends View {
             for (int j = 0; j < mTableRect[i].length; j++) {
                 Rect rect = mTableRect[i][j];
 
-                // draw sheet border
+                // draw sheet header background
                 if (i == 0 && mHeaderColor != 0) {
                     mBorderPaint.setColor(mHeaderColor);
                     mBorderPaint.setStyle(Paint.Style.FILL);
