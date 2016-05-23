@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
+import com.botpy.demo.ui.model.Row;
 import com.botpy.demo.widget.SheetView;
 
 import java.util.ArrayList;
@@ -43,10 +44,46 @@ public class MineFrgment extends BaseFragment {
             }
         });*/
         SheetView sheetView = (SheetView) view.findViewById(R.id.sheet_view);
+        sheetView.setRows(createRowData());
+    }
+
+    private List<Row> createRowData() {
+        List<Row> rows = new ArrayList<>();
+        Row row1 = new Row();
+        row1.cells.add("未出险时长");
+        row1.cells.add("保费折扣");
+        rows.add(row1);
+
+        Row row2 = new Row();
+        row2.cells.add("连续一年未出险");
+        row2.cells.add("0.685");
+        rows.add(row2);
+
+        Row row3 = new Row();
+        row3.cells.add("连续二年未出险");
+        row3.cells.add("0.567");
+        rows.add(row3);
+
+        Row row4 = new Row();
+        row4.cells.add("连续三年未出险");
+        row4.cells.add("0.486");
+        rows.add(row4);
+
+        Row row5 = new Row();
+        row5.cells.add("连续四年未出险");
+        row5.cells.add("0.405");
+        rows.add(row5);
+
+        Row row6 = new Row();
+        row6.cells.add("连续五年未出险");
+        row6.cells.add("0.324");
+        rows.add(row6);
+
+        return rows;
     }
 
     @Override
-    public void initData(Bundle saveInstaceState) {
+    public void initData(Bundle saveInstanceState) {
     }
 
     @Override

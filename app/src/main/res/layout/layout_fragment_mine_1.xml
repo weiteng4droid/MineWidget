@@ -26,7 +26,7 @@
         android:layout_margin="10dp"
         app:text_color="#ff6200"
         app:border_color="#0090ff"
-        app:header_background="#FFF6F6F6"
+        app:header_background="#ffdedcd2"
         app:row="6"
         app:column="2"/>
 

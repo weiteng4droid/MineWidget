@@ -5,11 +5,13 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
 import com.botpy.demo.R;
+import com.botpy.demo.ui.model.Row;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ public class SheetView extends View {
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0.5f, context.getResources().getDisplayMetrics()));
         mRowCount = typedArray.getInt(R.styleable.SheetView_row, 1);
         mColumnCount = typedArray.getInt(R.styleable.SheetView_column, 1);
-        mHeaderColor = typedArray.getColor(R.styleable.SheetView_border_color, 0);
+        mHeaderColor = typedArray.getColor(R.styleable.SheetView_header_background, 0);
         mBorderColor = typedArray.getColor(R.styleable.SheetView_border_color, 0xffffffff);
         int textColor = typedArray.getColor(R.styleable.SheetView_text_color, 0xff808080);
 
@@ -159,14 +161,12 @@ public class SheetView extends View {
     protected void onDraw(Canvas canvas) {
         mBorderPaint.setStrokeWidth(mBorderWidth);
 
-        // draw text
         Rect textRect = new Rect();
         for (int i = 0; i < mTableRect.length; i++) {
             for (int j = 0; j < mTableRect[i].length; j++) {
                 Rect rect = mTableRect[i][j];
-                String text = String.valueOf(mRows.get(i).cells.get(j));
-                mPaint.getTextBounds(text, 0, text.length(), textRect);
 
+                // draw sheet border
                 if (i == 0 && mHeaderColor != 0) {
                     mBorderPaint.setColor(mHeaderColor);
                     mBorderPaint.setStyle(Paint.Style.FILL);
@@ -176,8 +176,14 @@ public class SheetView extends View {
                 mBorderPaint.setColor(mBorderColor);
                 mBorderPaint.setStyle(Paint.Style.STROKE);
                 canvas.drawRect(rect, mBorderPaint);
-                canvas.drawText(text, 0, text.length(), rect.left + (rect.right - rect.left - textRect.width()) / 2,
-                        rect.top + (rect.height() / 2 - mTextOffsetY), mPaint);
+
+                // draw text
+                final String text = mRows.get(i).cells.get(j);
+                if (!TextUtils.isEmpty(text)) {
+                    mPaint.getTextBounds(text, 0, text.length(), textRect);
+                    canvas.drawText(text, 0, text.length(), rect.left + (rect.right - rect.left - textRect.width()) / 2,
+                            rect.top + (rect.height() / 2 - mTextOffsetY), mPaint);
+                }
             }
         }
 
@@ -192,19 +198,5 @@ public class SheetView extends View {
         canvas.drawLine(rect2.right, rect2.top, rect3.right, rect3.bottom, mBorderPaint);
         canvas.drawLine(rect3.right, rect3.bottom, rect4.left, rect4.bottom, mBorderPaint);
         canvas.drawLine(rect4.left, rect4.bottom, rect1.left, rect1.top, mBorderPaint);
-    }
-
-    class Row {
-        List<String> cells;
-
-        public Row() {}
-
-        public Row(List<String> cells) {
-            this.cells = cells;
-        }
-
-        public String getRowContent(int index) {
-            return cells.get(index);
-        }
     }
 }
