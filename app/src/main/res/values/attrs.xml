@@ -24,7 +24,7 @@
     lineBorder：边框的宽度
     lineBorderColor：边框的颜色
     -->
-    <declare-styleable name="ItemTableView">
+    <declare-styleable name="SegmentView">
         <attr name="it_texts" format="string" />
         <attr name="it_horizonGap" format="dimension|reference" />
         <attr name="it_verticalGap" format="dimension|reference" />

@@ -13,7 +13,6 @@ import android.view.View;
 import com.botpy.demo.R;
 import com.botpy.demo.ui.model.Row;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +21,9 @@ import java.util.List;
  * Created by weiTeng on 2016/5/12.
  */
 public class SheetView extends View {
+
+    private static final int MEASURE_WIDTH = 1;
+    private static final int MEASURE_HEIGHT = 2;
 
     private Paint mPaint, mBorderPaint;
     private int mRowCount, mColumnCount;
@@ -76,6 +78,7 @@ public class SheetView extends View {
 
     public void setRows(List<Row> rows) {
         this.mRows = rows;
+        requestLayout();
     }
 
     @Override
@@ -90,17 +93,17 @@ public class SheetView extends View {
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize - getPaddingLeft() - getPaddingRight();
         } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = getDefaultTextMaxWidth();
+            width = getDefaultTextDimension(MEASURE_WIDTH);
         } else {
-            width = getDefaultTextMaxWidth();
+            width = getDefaultTextDimension(MEASURE_WIDTH);
         }
 
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize - getPaddingBottom() - getPaddingTop();
         } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = getDefaultTextMaxHeight();
+            height = getDefaultTextDimension(MEASURE_HEIGHT);
         } else {
-            height = getDefaultTextMaxHeight();
+            height = getDefaultTextDimension(MEASURE_HEIGHT);
         }
 
         createTableRect(width, height);
@@ -135,68 +138,69 @@ public class SheetView extends View {
         }
     }
 
-    private int getDefaultTextMaxWidth() {
+    private int getDefaultTextDimension(int code) {
         int max = 0;
         for (int i = 0; i < mRowCount; i++) {
             Rect tempRect = new Rect();
-            String content = mRows.get(0).getRowContent(i);
-            mPaint.getTextBounds(content, 0, content.length(), tempRect);
-            max += (mCellPadding * 2 + tempRect.width());
+            String content;
+            if (code == MEASURE_WIDTH) {
+                content = mRows.get(0).getRowContent(i);
+                mPaint.getTextBounds(content, 0, content.length(), tempRect);
+                max += (/*mCellPadding * 2 + */tempRect.width());
+            } else {
+                content = mRows.get(i).getRowContent(0);
+                mPaint.getTextBounds(content, 0, content.length(), tempRect);
+                max += (mCellPadding * 2 + tempRect.height());
+            }
         }
         return max;
     }
 
-    private int getDefaultTextMaxHeight() {
-        int max = 0;
-        for (int i = 0; i < mColumnCount; i++) {
-            Rect tempRect = new Rect();
-            String content = mRows.get(i).getRowContent(0);
-            mPaint.getTextBounds(content, 0, content.length(), tempRect);
-            max += (mCellPadding * 2 + tempRect.height());
-        }
-        return max;
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         mBorderPaint.setStrokeWidth(mBorderWidth);
 
-        Rect textRect = new Rect();
-        for (int i = 0; i < mTableRect.length; i++) {
-            for (int j = 0; j < mTableRect[i].length; j++) {
-                Rect rect = mTableRect[i][j];
+        if (mRows != null && mRows.size() > 0) {
+            Rect textRect = new Rect();
+            for (int i = 0; i < mTableRect.length; i++) {
+                for (int j = 0; j < mTableRect[i].length; j++) {
+                    Rect rect = mTableRect[i][j];
 
-                // draw sheet header background
-                if (i == 0 && mHeaderColor != 0) {
-                    mBorderPaint.setColor(mHeaderColor);
-                    mBorderPaint.setStyle(Paint.Style.FILL);
+                    // draw sheet header background
+                    if (i == 0 && mHeaderColor != 0) {
+                        mBorderPaint.setColor(mHeaderColor);
+                        mBorderPaint.setStyle(Paint.Style.FILL);
+                        canvas.drawRect(rect, mBorderPaint);
+                    }
+
+                    mBorderPaint.setColor(mBorderColor);
+                    mBorderPaint.setStyle(Paint.Style.STROKE);
                     canvas.drawRect(rect, mBorderPaint);
-                }
 
-                mBorderPaint.setColor(mBorderColor);
-                mBorderPaint.setStyle(Paint.Style.STROKE);
-                canvas.drawRect(rect, mBorderPaint);
-
-                // draw text
-                final String text = mRows.get(i).cells.get(j);
-                if (!TextUtils.isEmpty(text)) {
-                    mPaint.getTextBounds(text, 0, text.length(), textRect);
-                    canvas.drawText(text, 0, text.length(), rect.left + (rect.right - rect.left - textRect.width()) / 2,
-                            rect.top + (rect.height() / 2 - mTextOffsetY), mPaint);
+                    // draw text
+                    if (i < mRows.size() && j < mRows.get(i).cells.size()) {
+                        final String text = mRows.get(i).cells.get(j);
+                        if (!TextUtils.isEmpty(text)) {
+                            mPaint.getTextBounds(text, 0, text.length(), textRect);
+                            canvas.drawText(text, 0, text.length(), rect.left + (rect.right - rect.left - textRect.width()) / 2,
+                                    rect.top + (rect.height() / 2 - mTextOffsetY), mPaint);
+                        }
+                    }
                 }
             }
+
+            // draw border line again
+            mBorderPaint.setStrokeWidth(mBorderWidth + 2);
+            Rect rect1 = mTableRect[0][0];
+            Rect rect2 = mTableRect[0][mColumnCount - 1];
+            Rect rect3 = mTableRect[mRowCount - 1][mColumnCount - 1];
+            Rect rect4 = mTableRect[mRowCount - 1][0];
+
+            canvas.drawLine(rect1.left, rect1.top, rect2.right, rect2.top, mBorderPaint);
+            canvas.drawLine(rect2.right, rect2.top, rect3.right, rect3.bottom, mBorderPaint);
+            canvas.drawLine(rect3.right, rect3.bottom, rect4.left, rect4.bottom, mBorderPaint);
+            canvas.drawLine(rect4.left, rect4.bottom, rect1.left, rect1.top, mBorderPaint);
         }
-
-        // draw border line again
-        mBorderPaint.setStrokeWidth(mBorderWidth + 2);
-        Rect rect1 = mTableRect[0][0];
-        Rect rect2 = mTableRect[0][mColumnCount - 1];
-        Rect rect3 = mTableRect[mRowCount - 1][mColumnCount - 1];
-        Rect rect4 = mTableRect[mRowCount - 1][0];
-
-        canvas.drawLine(rect1.left, rect1.top, rect2.right, rect2.top, mBorderPaint);
-        canvas.drawLine(rect2.right, rect2.top, rect3.right, rect3.bottom, mBorderPaint);
-        canvas.drawLine(rect3.right, rect3.bottom, rect4.left, rect4.bottom, mBorderPaint);
-        canvas.drawLine(rect4.left, rect4.bottom, rect1.left, rect1.top, mBorderPaint);
     }
 }

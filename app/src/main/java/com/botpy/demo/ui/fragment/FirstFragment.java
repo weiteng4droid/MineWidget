@@ -15,7 +15,7 @@ import com.botpy.demo.ui.activity.ScollActivity;
 import com.botpy.demo.ui.activity.TestViewGroupActivity;
 import com.botpy.demo.widget.FrameTextView;
 import com.botpy.demo.widget.GradientTextView;
-import com.botpy.demo.widget.ItemTableView;
+import com.botpy.demo.widget.SegmentView;
 import com.botpy.demo.widget.StarImageView;
 
 import butterknife.InjectView;
@@ -29,7 +29,7 @@ public class FirstFragment extends BaseFragment {
     private static final String TAG = "FirstFragment";
 
     @InjectView(R.id.item_table_view)
-    ItemTableView mItemTableView;
+    SegmentView mSegmentView;
     @InjectView(R.id.edittext)
     EditText mEditText;
     @InjectView(R.id.star_siv)
@@ -52,10 +52,10 @@ public class FirstFragment extends BaseFragment {
     @Override
     public void initView(View view) {
 
-        mItemTableView.setCurrentIndex(0);
-        mItemTableView.setOnSegmentItemClickListener(new ItemTableView.OnSegmentItemClickListener() {
+        mSegmentView.setCurrentIndex(0);
+        mSegmentView.setOnSegmentItemClickListener(new SegmentView.OnSegmentItemClickListener() {
             @Override
-            public void onSegmentIitemClick(int index) {
+            public void onSegmentItemClick(int index) {
                 Log.d(TAG, " FirstFragment : index = " + index);
             }
         });

@@ -1,33 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-    android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.botpy.demo.widget.HorizontalTestLayout
-        android:id="@+id/container"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="#ff00ff">
 
-        <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.botpy.demo.widget.HorizontalTestLayout
+            android:id="@+id/container"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:text="内容区域"
-            android:background="#ff0"/>
+            android:background="#ff00ff">
 
-    </com.botpy.demo.widget.HorizontalTestLayout>
+            <TextView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:background="#ff0"
+                android:text="内容区域"/>
 
-    <com.botpy.demo.widget.SheetView
-        android:id="@+id/sheet_view"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="10dp"
-        app:text_color="#ff6200"
-        app:border_color="#0090ff"
-        app:header_background="#ffdedcd2"
-        app:row="6"
-        app:column="2"/>
+        </com.botpy.demo.widget.HorizontalTestLayout>
 
-</LinearLayout>
+        <com.botpy.demo.widget.SheetView
+            android:id="@+id/sheet_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:border_color="#0090ff"
+            app:column="2"
+            app:header_background="#ffdedcd2"
+            app:row="6"
+            app:cell_padding="12dp"
+            app:text_color="#ff6200"/>
+
+        <com.botpy.demo.widget.SheetView
+            android:id="@+id/sheet_view_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:border_color="#0090ff"
+            app:column="3"
+            app:header_background="#ffdedcd2"
+            app:row="8"
+            app:cell_padding="12dp"
+            app:text_color="#ff6200"/>
+
+    </LinearLayout>
+
+</ScrollView>

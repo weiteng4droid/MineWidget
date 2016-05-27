@@ -14,11 +14,11 @@ import android.view.ViewConfiguration;
 import com.botpy.demo.R;
 
 /**
- * 切换item条目的控件
- * @author weiTeng
- * @since 2015-12-1 10:37:11
+ * SegmentView
+ *
+ * Created by weiTeng on 2015-12-1 10:37:11
  */
-public class ItemTableView extends View{
+public class SegmentView extends View {
 
     private String[] mTexts;
 
@@ -52,34 +52,36 @@ public class ItemTableView extends View{
     private OnSegmentItemClickListener mOnSegmentItemClickListener;
 
     public interface OnSegmentItemClickListener{
-        void onSegmentIitemClick(int index);
+        void onSegmentItemClick(int index);
     }
 
     public void setOnSegmentItemClickListener(OnSegmentItemClickListener onSegmentItemClickListener) {
         mOnSegmentItemClickListener = onSegmentItemClickListener;
     }
 
-    public ItemTableView(Context context) {
+    public SegmentView(Context context) {
         this(context, null);
     }
 
-    public ItemTableView(Context context, AttributeSet attrs) {
+    public SegmentView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ItemTableView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SegmentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ItemTableView);
-        String texts = ta.getString(R.styleable.ItemTableView_it_texts);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SegmentView);
+        String texts = ta.getString(R.styleable.SegmentView_it_texts);
         if(texts != null){
             mTexts = texts.split("\\|");
         }
-        mHorizonGap = ta.getDimensionPixelSize(R.styleable.ItemTableView_it_horizonGap, 0);
-        mVerticalGap = ta.getDimensionPixelSize(R.styleable.ItemTableView_it_verticalGap, 0);
-        mLineBorder = ta.getDimensionPixelSize(R.styleable.ItemTableView_it_lineBorder, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0.5f, context.getResources().getDisplayMetrics()));
-        mTextSize = ta.getDimensionPixelSize(R.styleable.ItemTableView_it_textSize, (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics()));
-        mColors = ta.getColor(R.styleable.ItemTableView_it_textColor, 0xff0099cc);
-        mBorderColor = ta.getColor(R.styleable.ItemTableView_it_lineBorderColor, 0xffa0a9b0);
+        mHorizonGap = ta.getDimensionPixelSize(R.styleable.SegmentView_it_horizonGap, 0);
+        mVerticalGap = ta.getDimensionPixelSize(R.styleable.SegmentView_it_verticalGap, 0);
+        mLineBorder = ta.getDimensionPixelSize(R.styleable.SegmentView_it_lineBorder,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0.5f, context.getResources().getDisplayMetrics()));
+        mTextSize = ta.getDimensionPixelSize(R.styleable.SegmentView_it_textSize,
+                (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics()));
+        mColors = ta.getColor(R.styleable.SegmentView_it_textColor, 0xff0099cc);
+        mBorderColor = ta.getColor(R.styleable.SegmentView_it_lineBorderColor, 0xffa0a9b0);
         ta.recycle();
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -244,7 +246,7 @@ public class ItemTableView extends View{
                     if(mCurrentIndex != index) {
                         mCurrentIndex = index;
                         if (mOnSegmentItemClickListener != null) {
-                            mOnSegmentItemClickListener.onSegmentIitemClick(index);
+                            mOnSegmentItemClickListener.onSegmentItemClick(index);
                         }
                     }
                     invalidate();

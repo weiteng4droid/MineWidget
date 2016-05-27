@@ -7,7 +7,7 @@
               android:orientation="vertical">
 
 
-    <com.botpy.demo.widget.ItemTableView
+    <com.botpy.demo.widget.SegmentView
         android:id="@+id/item_table_view"
         android:layout_width="match_parent"
         android:layout_height="50dp"

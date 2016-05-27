@@ -19,32 +19,15 @@ import java.util.List;
 public class MineFrgment extends BaseFragment {
 
     private static final String TAG = "MineFrgment";
-//    @InjectView(R.id.achievement)
-//    AchievementView mAchievement;
-//
-//    @InjectView(R.id.icon_tv)
-//    IconTextView mIconTextView;
 
     @Override
     public void initView(View view) {
 
-    /*
-        ArrayList<ChartModel> models = new ArrayList<>();
-        models.add(new ChartModel("100", Color.parseColor("#f76450")));
-        models.add(new ChartModel("34", Color.parseColor("#f78750")));
-        models.add(new ChartModel("65", Color.parseColor("#ffae22")));
-        models.add(new ChartModel("51", Color.parseColor("#ffcc00")));
-        mAchievement.setChartModels(models);
-
-        mIconTextView.setOnIconTextClickListener(new IconTextView.OnIconTextClickListener() {
-            @Override
-            public void onIconTextClick(IconTextView iview) {
-                Toast.makeText(mActivity, "点击控件", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(mActivity, HomeActivity.class));
-            }
-        });*/
         SheetView sheetView = (SheetView) view.findViewById(R.id.sheet_view);
         sheetView.setRows(createRowData());
+
+        SheetView sheetView2 = (SheetView) view.findViewById(R.id.sheet_view_2);
+        sheetView2.setRows(createRowData2());
     }
 
     private List<Row> createRowData() {
@@ -78,6 +61,59 @@ public class MineFrgment extends BaseFragment {
         row6.cells.add("连续五年未出险");
         row6.cells.add("0.324");
         rows.add(row6);
+
+        return rows;
+    }
+
+    private List<Row> createRowData2() {
+        List<Row> rows = new ArrayList<>();
+        Row row1 = new Row();
+        row1.cells.add("出现次数");
+        row1.cells.add("未超保费折扣");
+        row1.cells.add("超保费的折扣");
+        rows.add(row1);
+
+        Row row2 = new Row();
+        row2.cells.add("1-2");
+        row2.cells.add("0.729");
+        row2.cells.add("0.81");
+        rows.add(row2);
+
+        Row row3 = new Row();
+        row3.cells.add("3");
+        row3.cells.add("0.802");
+        row3.cells.add("0.891");
+        rows.add(row3);
+
+        Row row4 = new Row();
+        row4.cells.add("4");
+        row4.cells.add("0.875");
+        row4.cells.add("0.972");
+        rows.add(row4);
+
+        Row row5 = new Row();
+        row5.cells.add("5");
+        row5.cells.add("1.0935");
+        row5.cells.add("1.215");
+        rows.add(row5);
+
+        Row row6 = new Row();
+        row6.cells.add("6");
+        row6.cells.add("1.485");
+        row6.cells.add("1.628");
+        rows.add(row6);
+
+        Row row7 = new Row();
+        row7.cells.add("7");
+        row7.cells.add("1.823");
+        row7.cells.add("2.025");
+        rows.add(row7);
+
+        Row row8 = new Row();
+        row8.cells.add("8");
+        row8.cells.add("2.187");
+        row8.cells.add("2.438");
+        rows.add(row8);
 
         return rows;
     }
