@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="QuickIndexView">
+        <attr name="index_text_color" format="color|reference"/>
+        <attr name="index_text_select_color" format="color|reference"/>
+        <attr name="index_text_size" format="dimension|reference"/>
+        <attr name="index_texts" format="string|reference" />
+        <attr name="index_text_gap" format="dimension|reference" />
+    </declare-styleable>
+</resources>

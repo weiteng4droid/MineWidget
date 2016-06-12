@@ -65,7 +65,7 @@ public class TabView extends View {
 
     private OnTabClickListener mOnTabClickListener;
 
-    public interface OnTabClickListener{
+    public interface OnTabClickListener {
         void onTabClick(int index);
     }
 

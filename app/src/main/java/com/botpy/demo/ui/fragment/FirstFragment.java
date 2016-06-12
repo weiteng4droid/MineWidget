@@ -1,7 +1,9 @@
 package com.botpy.demo.ui.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +14,6 @@ import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
 import com.botpy.demo.dialog.TFragmentDialog;
 import com.botpy.demo.ui.activity.ScollActivity;
-import com.botpy.demo.ui.activity.TestViewGroupActivity;
 import com.botpy.demo.widget.FrameTextView;
 import com.botpy.demo.widget.GradientTextView;
 import com.botpy.demo.widget.SegmentView;
@@ -84,10 +85,37 @@ public class FirstFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity, TestViewGroupActivity.class);
-                startActivity(intent);
+                createDialog();
             }
         });
+    }
+
+    private void createDialog() {
+        new AlertDialog.Builder(mActivity)
+                .setMessage("猫猫萌吗")
+                .setPositiveButton("萌萌哒",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                dialog.dismiss();
+                                Log.d("春","萌");
+
+
+                            }
+                        })
+                .setNegativeButton("不萌",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                Log.d("春","不萌");
+                            }
+                        })
+                .setCancelable(false)
+                .show();
     }
 
     private void startNewActivity(){
