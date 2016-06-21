@@ -19,6 +19,7 @@ import java.util.List;
 public class MineFrgment extends BaseFragment {
 
     private static final String TAG = "MineFrgment";
+    private SheetView mSheetView;
 
     @Override
     public void initView(View view) {
@@ -26,8 +27,7 @@ public class MineFrgment extends BaseFragment {
         SheetView sheetView = (SheetView) view.findViewById(R.id.sheet_view);
         sheetView.setRows(createRowData());
 
-        SheetView sheetView2 = (SheetView) view.findViewById(R.id.sheet_view_2);
-        sheetView2.setRows(createRowData2());
+        mSheetView = (SheetView) view.findViewById(R.id.sheet_view_2);
     }
 
     private List<Row> createRowData() {
@@ -68,13 +68,17 @@ public class MineFrgment extends BaseFragment {
     private List<Row> createRowData2() {
         List<Row> rows = new ArrayList<>();
         Row row1 = new Row();
-        row1.cells.add("出现次数");
-        row1.cells.add("未超保费折扣");
-        row1.cells.add("超保费的折扣");
+        row1.cells.add("次数");
+        row1.cells.add("保险公司");
+        row1.cells.add("开始日期");
+        row1.cells.add("结束日期");
+        row1.cells.add("赔偿金额");
         rows.add(row1);
 
         Row row2 = new Row();
-        row2.cells.add("1-2");
+        row2.cells.add("1");
+        row2.cells.add("0.729324");
+        row2.cells.add("0.81");
         row2.cells.add("0.729");
         row2.cells.add("0.81");
         rows.add(row2);
@@ -83,10 +87,14 @@ public class MineFrgment extends BaseFragment {
         row3.cells.add("3");
         row3.cells.add("0.802");
         row3.cells.add("0.891");
+        row3.cells.add("0.802");
+        row3.cells.add("0.891");
         rows.add(row3);
 
         Row row4 = new Row();
         row4.cells.add("4");
+        row4.cells.add("0.875");
+        row4.cells.add("0.972");
         row4.cells.add("0.875");
         row4.cells.add("0.972");
         rows.add(row4);
@@ -95,31 +103,31 @@ public class MineFrgment extends BaseFragment {
         row5.cells.add("5");
         row5.cells.add("1.0935");
         row5.cells.add("1.215");
+        row5.cells.add("1.0935");
+        row5.cells.add("1.215");
         rows.add(row5);
-
-        Row row6 = new Row();
-        row6.cells.add("6");
-        row6.cells.add("1.485");
-        row6.cells.add("1.628");
-        rows.add(row6);
-
-        Row row7 = new Row();
-        row7.cells.add("7");
-        row7.cells.add("1.823");
-        row7.cells.add("2.025");
-        rows.add(row7);
-
-        Row row8 = new Row();
-        row8.cells.add("8");
-        row8.cells.add("2.187");
-        row8.cells.add("2.438");
-        rows.add(row8);
-
         return rows;
     }
 
     @Override
     public void initData(Bundle saveInstanceState) {
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSheetView.setRows(createRowData2());
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
