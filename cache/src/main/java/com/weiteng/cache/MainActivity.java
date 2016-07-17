@@ -97,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
         bannerList.add(bannerItem2);
         bannerList.add(bannerItem3);
 
-        CacheManager.cacheModel(this, "bannerList", bannerList);
+        CacheManager.cacheSerializable(this, "bannerList", bannerList);
     }
 
     @OnClick(R.id.get_cache_btn)
     public void getCache() {
-        List<BannerItem> bannerList = CacheManager.getModelForKey(this, "bannerList");
+        List<BannerItem> bannerList = CacheManager.getSerializableFromCache(this, "bannerList");
         if (bannerList != null) {
             Log.d(TAG, bannerList.toString());
         } else {

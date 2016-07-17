@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PickView">
+        <attr name="picker_gravity">
+            <enum name="center" value="17"/>
+            <enum name="left" value="3"/>
+            <enum name="right" value="5"/>
+        </attr>
+        <attr name="picker_textSize" format="dimension|reference"/>
+        <attr name="picker_textColorOut" format="color|reference"/>
+        <attr name="picker_textColorCenter" format="color|reference"/>
+        <attr name="picker_dividerColor" format="color|reference"/>
+        <attr name="picker_lineSpacing" format="float"/>
+    </declare-styleable>
+</resources>

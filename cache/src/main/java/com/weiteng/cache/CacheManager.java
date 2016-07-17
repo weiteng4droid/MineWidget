@@ -7,11 +7,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -19,6 +24,8 @@ import java.security.NoSuchAlgorithmException;
  * Created by weiTeng on 2016/4/28.
  */
 public class CacheManager {
+
+    private static final int CACHE_SIZE = 10 * 1024 * 1024;
 
     public static File getDiskCacheDir(Context context, String uniqueName) {
         String cachePath;
@@ -55,8 +62,8 @@ public class CacheManager {
 
     private static String bytesToHexString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(0xFF & bytes[i]);
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xFF & b);
             if (hex.length() == 1) {
                 sb.append('0');
             }
@@ -71,7 +78,7 @@ public class CacheManager {
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
-            return DiskLruCache.open(cacheDir, getAppVersion(context), 1, 2 * 1024 * 1024);
+            return DiskLruCache.open(cacheDir, getAppVersion(context), 1, CACHE_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,7 +104,7 @@ public class CacheManager {
         }
     }
 
-    public static Bitmap getBitmapForKey(Context context, String key) {
+    public static Bitmap getBitmapFromCache(Context context, String key) {
         try {
             DiskLruCache diskLruCache = openDiskLruCache(context, "bitmap");
             if (diskLruCache != null) {
@@ -112,7 +119,7 @@ public class CacheManager {
         return null;
     }
 
-    public static <T> void cacheModel(Context context, String key, T model) {
+    public static <T> void cacheSerializable(Context context, String key, T model) {
         try {
             DiskLruCache diskLruCache = openDiskLruCache(context, "model");
             if (diskLruCache != null) {
@@ -128,7 +135,7 @@ public class CacheManager {
         }
     }
 
-    public static <T> T getModelForKey(Context context, String key) {
+    public static <T> T getSerializableFromCache(Context context, String key) {
         try {
             DiskLruCache diskLruCache = openDiskLruCache(context, "model");
             if (diskLruCache != null) {
@@ -141,6 +148,44 @@ public class CacheManager {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void cacheString(Context context, String key, String value) {
+        try {
+            DiskLruCache diskLruCache = openDiskLruCache(context, "string");
+            if (diskLruCache != null) {
+                DiskLruCache.Editor editor = diskLruCache.edit(hashKeyForDiskCache(key));
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(editor.newOutputStream(0)));
+                bw.write(value);
+                bw.flush();
+                editor.commit();
+                diskLruCache.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getStringFromCache(Context context, String key) {
+        try {
+            DiskLruCache diskLruCache = openDiskLruCache(context, "string");
+            if (diskLruCache != null) {
+                DiskLruCache.Snapshot snapshot = diskLruCache.get(hashKeyForDiskCache(key));
+                if (snapshot != null) {
+                    StringBuilder sb = new StringBuilder();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(snapshot.getInputStream(0)));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    reader.close();
+                    return sb.toString();
+                }
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

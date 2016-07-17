@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_picker_head"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pickerview_topbar_height"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_color"/>
+
+    <LinearLayout
+        android:id="@+id/optionspicker"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <com.bigkoo.pickerview.lib.WheelView
+            android:id="@+id/options1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:picker_dividerColor="@color/text_color_divider"
+            app:picker_gravity="center"
+            app:picker_lineSpacing="1.5"
+            app:picker_textColorCenter="@color/text_color_center"
+            app:picker_textColorOut="@color/text_color_out"
+            app:picker_textSize="18sp"/>
+
+        <com.bigkoo.pickerview.lib.WheelView
+            android:id="@+id/options2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:picker_dividerColor="@color/text_color_divider"
+            app:picker_gravity="center"
+            app:picker_lineSpacing="1.5"
+            app:picker_textColorCenter="@color/text_color_center"
+            app:picker_textColorOut="@color/text_color_out"
+            app:picker_textSize="18sp"/>
+
+        <com.bigkoo.pickerview.lib.WheelView
+            android:id="@+id/options3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:picker_dividerColor="@color/text_color_divider"
+            app:picker_gravity="center"
+            app:picker_lineSpacing="1.5"
+            app:picker_textColorCenter="@color/text_color_center"
+            app:picker_textColorOut="@color/text_color_out"
+            app:picker_textSize="18sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
