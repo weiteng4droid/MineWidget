@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.botpy.demo.R;
 
@@ -40,9 +42,10 @@ public class QuickIndexView extends View {
     private int mGap;
     private int mTextSize;
     private float mOffsetY;
-    private int mIndex;
+    private int mIndex = -1;
 
     private OnQuickIndexListener onQuickIndexListener;
+    private TextView mShowLabel;
 
     public QuickIndexView(Context context) {
         this(context, null);
@@ -156,9 +159,17 @@ public class QuickIndexView extends View {
         }
     }
 
+    public void setShowLabel(TextView showLabel) {
+        mShowLabel = showLabel;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                setBackgroundResource(R.drawable.quick_index__bg);
+                break;
+
             case MotionEvent.ACTION_MOVE:
                 float mStartX = event.getX();
                 float mStartY = event.getY();
@@ -175,7 +186,12 @@ public class QuickIndexView extends View {
                 if (index != -1 && mIndex != index) {
                     mIndex = index;
                     if (onQuickIndexListener != null) {
-                        onQuickIndexListener.onQuickIndex(mIndex, mTexts[mIndex]);
+                        String word = mTexts[mIndex];
+                        if (mShowLabel != null) {
+                            mShowLabel.setVisibility(VISIBLE);
+                            mShowLabel.setText(word);
+                        }
+                        onQuickIndexListener.onQuickIndex(mIndex, word);
                     }
                     invalidate();
                 }
@@ -183,6 +199,10 @@ public class QuickIndexView extends View {
 
             case MotionEvent.ACTION_UP:
                 mIndex = -1;
+                if (mShowLabel != null) {
+                    mShowLabel.setVisibility(GONE);
+                }
+                setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 invalidate();
                 break;
         }
@@ -191,12 +211,12 @@ public class QuickIndexView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // drawable background
+        // Draw background
         super.onDraw(canvas);
 
-        // drawable text
+        // Draw text
         for (int i = 0; i < mTextRects.length; i++) {
-            RectF rect = mTextRects[i];
+            final RectF rect = mTextRects[i];
             if (mIndex != -1) {
                 if (i != mIndex) {
                     mPaint.setColor(mTextColor);

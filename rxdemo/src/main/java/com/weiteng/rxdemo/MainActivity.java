@@ -1,5 +1,6 @@
 package com.weiteng.rxdemo;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
@@ -7,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,11 +23,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "MainActivity";
+
     private Context mContext;
+    private Button basicButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setAction("Action", null).show();
             }
         });
-        findViewById(R.id.button_rx_basic).setOnClickListener(this);
+        basicButton = (Button) findViewById(R.id.button_rx_basic);
+        basicButton.setOnClickListener(this);
         findViewById(R.id.button_rx_convert).setOnClickListener(this);
         findViewById(R.id.button_rx_just).setOnClickListener(this);
         findViewById(R.id.button_rx_from).setOnClickListener(this);
@@ -51,13 +58,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_rx_range).setOnClickListener(this);
         findViewById(R.id.button_rx_timer).setOnClickListener(this);
         findViewById(R.id.button_rx_interval).setOnClickListener(this);
+        findViewById(R.id.button_rx_schedule).setOnClickListener(this);
+        findViewById(R.id.button_rx_scan).setOnClickListener(this);
+        findViewById(R.id.button_rx_merge).setOnClickListener(this);
+        findViewById(R.id.button_rx_zip).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_rx_basic:
-                basicDemo();
+//                basicDemo();
+                animatorDemo();
                 break;
 
             case R.id.button_rx_convert:
@@ -87,7 +99,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_rx_interval: // 轮询
                 intervalDemo();
                 break;
+
+            case R.id.button_rx_schedule: // 线程调度
+//                transformThread();
+                demo3();
+                break;
+
+            case R.id.button_rx_scan:    // Scan操作符
+                testScanOfRxJava();
+                break;
+
+            case R.id.button_rx_merge:   // Merge操作符
+                testMergeOperator();
+                break;
+
+            case R.id.button_rx_zip:     // zip操作符
+                testZipOperator();
+                break;
         }
+    }
+
+    void animatorDemo() {
+        basicButton.setText("测试动画");
+
+        int distance = 100;
+        ValueAnimator animator = ValueAnimator.ofInt(0, distance);
+        animator.setTarget(basicButton);
+        animator.setDuration(500);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                basicButton.setTranslationY((int)animation.getAnimatedValue());
+            }
+        });
+        animator.start();
     }
 
     /**
@@ -343,37 +389,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void call(Subscriber<? super String> subscriber) {
-
+                try {
+                    Thread.sleep(1000);     // 模拟请求网络
+                    String name = "teng";
+                    subscriber.onNext(name);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    subscriber.onError(e);
+                } finally {
+                    subscriber.onCompleted();
+                }
             }
         });
-
-        Subscriber<String> subscriber = new Subscriber<String>() {
-
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-
-            }
-        };
-
-        observable.subscribe(subscriber);
+        observable.subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        toast("onStart()");
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        toast("onNext() name = " + s);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        toast(throwable.getMessage());
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        toast("complete");
+                    }
+                });
     }
 
     /**
-     * flitMap 变换
+     * FlitMap 变换
      */
     void demo3() {
         List<Student> students = createStudents();
-        Observable<Course> observable = Observable
+
+        Observable
                 .from(students)
                 .flatMap(new Func1<Student, Observable<Course>>() {
 
@@ -382,41 +443,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         List<Course> courses = student.getCourses();
                         return Observable.from(courses);
                     }
-                });
-
-        Action1<Course> onNextAction = new Action1<Course>() {
-
-            @Override
-            public void call(Course s) {
-                Toast.makeText(mContext, "name = " + s.name + ", score = " + s.score, Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        Action1<Throwable> onErrorAction = new Action1<Throwable>() {
-
-            @Override
-            public void call(Throwable throwable) {
-                Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        Action0 onCompletedAction = new Action0() {
-
-            @Override
-            public void call() {
-                Toast.makeText(mContext, "输出完成", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-        observable
+                })
+                .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-
+                        Toast.makeText(mContext, "发射之前", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .subscribeOn(Schedulers.io())
-                .subscribe(onNextAction, onErrorAction, onCompletedAction);
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Action1<Course>() {
+                            @Override
+                            public void call(Course s) {
+                                Toast.makeText(mContext, "name = " + s.name + ", score = " + s.score, Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Action0() {
+                            @Override
+                            public void call() {
+                                Toast.makeText(mContext, "输出完成", Toast.LENGTH_SHORT).show();
+                            }
+                        });
     }
 
     List<Student> createStudents() {
@@ -435,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         courses2.add(new Course("english", 9));
 
         stu1.setCourses(courses1);
-        stu2.setCourses(courses2);
+        stu2.setCourses(null);
 
         students.add(stu1);
         students.add(stu2);
@@ -482,9 +535,128 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private String name;
         private int score;
 
+        public Course(String name) {
+            this.name = name;
+        }
+
         public Course(String name, int score) {
             this.name = name;
             this.score = score;
         }
+    }
+
+    /**
+     * 线程的多次切换
+     */
+    private void transformThread() {
+        Observable.just(1, 3, 5)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<Integer, String>() {
+                    @Override
+                    public String call(Integer integer) {
+                        Log.d(TAG, "Thread name1 = " + Thread.currentThread().getName());
+                        return String.valueOf(integer);
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Func1<String, Course>() {
+                    @Override
+                    public Course call(String s) {
+                        Log.d(TAG, "Thread name2 = " + Thread.currentThread().getName());
+                        return new Course(s);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Course>() {
+                    @Override
+                    public void call(Course course) {
+                        Log.d(TAG, "Thread name subscribe = " + Thread.currentThread().getName());
+                        Log.d(TAG, "name = " + course.name);
+                    }
+                });
+    }
+
+    /**
+     * Rx性能测试
+     */
+    public void testScanOfRxJava() {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        Observable
+                .from(list)
+                .scan(new Func2<Integer, Integer, Integer>() {
+                    @Override
+                    public Integer call(Integer a, Integer b) {
+                        Log.d(TAG, "a = " + a);
+                        Log.d(TAG, "b = " + b);
+                        return a * b;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.d(TAG, "i = " + integer);
+                    }
+                });
+    }
+
+    public void testMergeOperator() {
+        List<String> list1 = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            list1.add("hello i:" + i);
+        }
+        List<String> list = new ArrayList<>();
+        for (int j = 0; j < 30; j++) {
+            list.add("world j:" + j);
+        }
+        List<String> list2 = new ArrayList<>();
+        for (int m = 0; m < 30; m++) {
+            list2.add("fuck m:" + m);
+        }
+        Observable<String> world = Observable.from(list);
+        Observable<String> hello = Observable.from(list1);
+        Observable<String> fuck = Observable.from(list2);
+
+        Observable
+                .merge(world, hello, fuck)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.d(TAG, "s = " + s);
+                    }
+                });
+    }
+
+    private void testZipOperator() {
+        List<String> list1 = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            list1.add("hello i:" + i);
+        }
+        List<String> list2 = new ArrayList<>();
+        for (int j = 0; j < 30; j++) {
+            list2.add("world j:" + j);
+        }
+
+        Observable<String> observable1 = Observable.from(list1);
+        Observable<String> observable2 = Observable.from(list2);
+        Observable
+                .zip(observable1, observable2, new Func2<String, String, String>() {
+                    @Override
+                    public String call(String s1, String s2) {
+                        return s1 + " zip " + s2;
+                    }
+                })
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.d(TAG, "s = " + s);
+                    }
+                });
+
     }
 }

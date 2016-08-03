@@ -28,17 +28,6 @@
         android:text="获取缓存"/>
     -->
 
-    <com.botpy.demo.widget.QuickIndexView
-        android:id="@+id/quick_index_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/quick_index__bg"
-        app:index_text_gap="5dp"/>
-
     <TextView
         android:id="@+id/word_label"
         android:layout_width="100dp"
@@ -51,5 +40,15 @@
         android:background="@drawable/hint_label_bg"
         tools:visibility="visible"
         tools:text="A"/>
+
+    <com.botpy.demo.widget.QuickIndexView
+        android:id="@+id/quick_index_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        app:index_text_gap="5dp"/>
 
 </RelativeLayout>

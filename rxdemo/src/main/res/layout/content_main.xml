@@ -11,62 +11,105 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.weiteng.rxdemo.MainActivity"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:showIn="@layout/activity_main">
 
-    <Button
-        android:id="@+id/button_rx_basic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="基础写法"/>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="变换样式"
-        android:id="@+id/button_rx_convert"/>
+        <Button
+            android:id="@+id/button_rx_basic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="基础写法"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="just创建被观察者"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_rx_just"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="变换样式"
+            android:id="@+id/button_rx_convert"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="from创建被观察者"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_rx_from"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="just创建被观察者"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_just"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="repeat创建被观察者"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_rx_repeat"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="from创建被观察者"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_from"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="range创建被观察者"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_rx_range" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="repeat创建被观察者"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_repeat"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="timer创建被观察者"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_rx_timer" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="range创建被观察者"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_range" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="interval创建被观察者"
-        android:layout_marginTop="10dp"
-        android:id="@+id/button_rx_interval" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="timer创建被观察者"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_timer" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="interval创建被观察者"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_interval" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="线程调度"
+            android:layout_marginTop="5dp"
+            android:id="@+id/button_rx_schedule" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan操作符"
+            android:id="@+id/button_rx_scan" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="merge操作符"
+            android:id="@+id/button_rx_merge" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="zip操作符"
+            android:id="@+id/button_rx_zip" />
+
+    </LinearLayout>
 
 </LinearLayout>

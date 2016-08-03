@@ -1,27 +1,15 @@
 package com.botpy.demo.ui.fragment;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.botpy.demo.R;
 import com.botpy.demo.base.BaseFragment;
-import com.botpy.demo.cache.CacheManager;
-import com.botpy.demo.ui.model.BannerItem;
-import com.botpy.demo.util.BitmapUtil;
 import com.botpy.demo.widget.QuickIndexView;
 
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * @author weiTeng on 2015/12/7.
@@ -54,23 +42,12 @@ public class SecondFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        final Handler handler = new Handler();
+        mIndexView.setShowLabel(mHintLabel);
         mIndexView.setOnQuickIndexListener(new QuickIndexView.OnQuickIndexListener() {
 
             @Override
             public void onQuickIndex(int index, String word) {
                 Log.d(TAG, "index = " + index + ", word = " + word);
-
-                mHintLabel.setVisibility(View.VISIBLE);
-                mHintLabel.setText(word);
-                handler.removeCallbacks(null);
-                handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        mHintLabel.setVisibility(View.INVISIBLE);
-                    }
-                }, 1000);
             }
         });
     }
