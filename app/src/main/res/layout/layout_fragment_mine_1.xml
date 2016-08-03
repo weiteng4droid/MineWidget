@@ -42,9 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             app:border_color="#0090ff"
-            app:column="3"
+            app:column="5"
             app:header_background="#ffdedcd2"
-            app:row="8"
             app:cell_padding="12dp"
             app:text_color="#ff6200"/>
 

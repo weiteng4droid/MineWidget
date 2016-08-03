@@ -78,6 +78,8 @@ public class SheetView extends View {
 
     public void setRows(List<Row> rows) {
         this.mRows = rows;
+        mRowCount = mRows.size();
+        mTableRect = new Rect[mRowCount][mColumnCount];
         requestLayout();
     }
 
@@ -140,6 +142,10 @@ public class SheetView extends View {
 
     private int getDefaultTextDimension(int code) {
         int max = 0;
+        if (mRows == null) {
+            return max;
+        }
+
         for (int i = 0; i < mRowCount; i++) {
             Rect tempRect = new Rect();
             String content;

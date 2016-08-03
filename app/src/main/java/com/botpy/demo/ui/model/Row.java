@@ -18,4 +18,8 @@ public class Row {
     public String getRowContent(int index) {
         return cells.get(index);
     }
+
+    public int getColumnOfRow() {
+        return cells.size();
+    }
 }
