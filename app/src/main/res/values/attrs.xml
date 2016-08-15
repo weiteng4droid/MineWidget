@@ -126,5 +126,11 @@
         <attr name="tag_background" format="color|reference" />
         <attr name="tag_text_color" format="color|reference" />
     </declare-styleable>
+
+    <declare-styleable name="SpinnerView">
+        <attr name="inner_radius" format="dimension|reference" />
+        <attr name="outer_radius" format="dimension|reference" />
+        <attr name="velocity" format="integer" />
+    </declare-styleable>
     
 </resources>
