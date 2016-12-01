@@ -75,6 +75,6 @@
         app:ts_textSelectColor="#3b4245"
         app:ts_normalColor="#f5f5f5"
         app:ts_selectColor="#fff"
-        app:ts_texts="按车牌号|按车架号|按保单号|按xx查询"/>
+        app:ts_texts="按车牌号|按车架号|按保单号|按人品查询"/>
 
 </LinearLayout>

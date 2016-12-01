@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -57,10 +58,11 @@ public class TabSegmentView extends View {
     private int mTextSize;
     private Path mBackgroundPath;
     private Path mItemPath;
-    private int mDivideWidth;
-    private int mDivideColor;
 
     private float mTextOffsetY;
+    private float mPercent = 0.06f;
+
+    private double mDegree = Math.PI / 18;
 
     private OnSegmentItemClickListener mOnSegmentItemClickListener;
 
@@ -107,8 +109,8 @@ public class TabSegmentView extends View {
         mTextTopBottomGap = ta.getDimensionPixelSize(R.styleable.TabSegmentView_ts_textTopBottomGap, DEFAULT_GAP);
 
         mCurrentIndex = ta.getInt(R.styleable.TabSegmentView_ts_defaultIndex, 0);
-        mDivideColor = ta.getColor(R.styleable.TabSegmentView_ts_divideColor, 0xffdfe1e3);
-        mDivideWidth = ta.getDimensionPixelSize(R.styleable.TabSegmentView_ts_divideWidth,
+        int divideColor = ta.getColor(R.styleable.TabSegmentView_ts_divideColor, 0xffdfe1e3);
+        int divideWidth = ta.getDimensionPixelSize(R.styleable.TabSegmentView_ts_divideWidth,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         DEFAULT_DIVIDE_WIDTH, context.getResources().getDisplayMetrics()));
 
@@ -126,8 +128,8 @@ public class TabSegmentView extends View {
 
         mDividePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mDividePaint.setStyle(Paint.Style.FILL);
-        mDividePaint.setColor(mDivideColor);
-        mDividePaint.setStrokeWidth(mDivideWidth);
+        mDividePaint.setColor(divideColor);
+        mDividePaint.setStrokeWidth(divideWidth);
 
         // 对触摸的点进行定义，提高精度
         int touchSlop = 0;
@@ -353,6 +355,7 @@ public class TabSegmentView extends View {
         }
     }
 
+
     private void createLeftItemPath() {
         Rect rect = mCacheBounds[0];
         mItemPath = new Path();
@@ -360,23 +363,50 @@ public class TabSegmentView extends View {
         mItemPath.lineTo(rect.left, rect.top + mRadius);
         mItemPath.arcTo(new RectF(rect.left, rect.top, rect.left + 2 * mRadius, rect.top + 2 * mRadius), 180, 90);
 
-        mItemPath.lineTo(rect.right, rect.top);
-        mItemPath.lineTo(rect.right + 0.08f * rect.width(), rect.bottom);
+        mItemPath.lineTo((float) (rect.right - mRadius * Math.tan(Math.PI / 4 + mDegree / 2)), rect.top);
+        mItemPath.arcTo(createRightAcrRectF(rect), -90, sweepAngle());
+
+        mItemPath.lineTo(rect.right + calculateDiff(rect), rect.bottom);
         mItemPath.lineTo(rect.left, rect.bottom);
         mItemPath.close();
+    }
+
+    private float sweepAngle() {
+        return (float) ((Math.PI / 2 - mDegree) * (180 / Math.PI));
+    }
+
+    private RectF createRightAcrRectF(Rect rect) {
+        float left = (float) (rect.right - Math.tan(Math.PI / 4 + mDegree / 2) * mRadius - mRadius);
+        float right = (float) (rect.right - Math.tan(Math.PI / 4 + mDegree / 2) * mRadius + mRadius);
+        return new RectF(left, rect.top, right, rect.top + 2 * mRadius);
+    }
+
+    private RectF createLeftAcrRectF(Rect rect) {
+        float left = (float) (rect.left -(mRadius - Math.tan(Math.PI / 4 - mDegree / 2) * mRadius));
+        float right = (float) (rect.left + Math.tan(Math.PI / 4 - mDegree / 2) * mRadius + mRadius);
+        return new RectF(left, rect.top, right, rect.top + 2 * mRadius);
+    }
+
+    private float createWaistX(Rect rect) {
+        return (float) (rect.left - (Math.cos(mDegree) * mRadius - Math.tan(Math.PI / 4 - mDegree / 2) * mRadius));
+    }
+
+    private float createWaistY(Rect rect) {
+        return (float) (rect.top + (mRadius - Math.sin(mDegree) * mRadius));
     }
 
     private void createRightItemPath() {
         Rect rect = mCacheBounds[mTexts.length - 1];
         mItemPath = new Path();
 
-        mItemPath.moveTo(rect.left - 0.08f * rect.width(), rect.bottom);
-        mItemPath.lineTo(rect.left, rect.top);
+        mItemPath.moveTo(createWaistX(rect), createWaistY(rect));
+        mItemPath.arcTo(createLeftAcrRectF(rect), 180 + (90 - sweepAngle()), sweepAngle());
         mItemPath.lineTo(rect.right - mRadius, rect.top);
         mItemPath.arcTo(new RectF(rect.right - 2 * mRadius, rect.top, rect.right, rect.top + 2 * mRadius), -90, 90);
 
         mItemPath.lineTo(rect.right, rect.bottom);
-        mItemPath.lineTo(rect.left - 0.08f * rect.width(), rect.bottom);
+        mItemPath.lineTo(rect.left - calculateDiff(rect), rect.bottom);
+        mItemPath.lineTo(createWaistX(rect), createWaistY(rect));
         mItemPath.close();
     }
 
@@ -384,12 +414,20 @@ public class TabSegmentView extends View {
         Rect rect = mCacheBounds[index];
         mItemPath = new Path();
 
-        mItemPath.moveTo(rect.left, rect.top);
-        mItemPath.lineTo(rect.right, rect.top);
+        mItemPath.moveTo(createWaistX(rect), createWaistY(rect));
+        mItemPath.arcTo(createLeftAcrRectF(rect), 180 + (90 - sweepAngle()), sweepAngle());
+        mItemPath.lineTo((float) (rect.right - mRadius * Math.tan(Math.PI / 4 + mDegree / 2)), rect.top);
+        mItemPath.arcTo(createRightAcrRectF(rect), -90, sweepAngle());
 
-        mItemPath.lineTo(rect.right + 0.08f * rect.width(), rect.bottom);
-        mItemPath.lineTo(rect.left - 0.08f * rect.width(), rect.bottom);
+        mItemPath.lineTo(rect.right + calculateDiff(rect), rect.bottom);
+        mItemPath.lineTo(rect.left - calculateDiff(rect), rect.bottom);
+
+        mItemPath.lineTo(createWaistX(rect), createWaistY(rect));
         mItemPath.close();
+    }
+
+    private float calculateDiff(Rect rect) {
+        return (float) (rect.height() * Math.tan(mDegree));
     }
 
     /**
