@@ -34,6 +34,35 @@
         <attr name="it_lineBorder" format="dimension|reference" />
     </declare-styleable>
 
+    <!--
+         ts_texts:            文字中间使用 | 隔开
+         ts_textSize:         文字大小
+         ts_textNormalColor:  文字未选中的颜色
+         ts_textSelectColor:  文字选中的颜色
+         ts_radius:           边缘圆角大小
+         ts_normalColor:      未选中的背景色
+         ts_selectColor:      选中的背景色
+         ts_textLeftRightGap: 文字左右的内间隙, 注意: wrap_content 下可用
+         ts_textTopBottomGap: 文字上下的内间隙, 注意: wrap_content 下可用
+         ts_defaultIndex:     默认选中的位置
+         ts_divideWidth:      分割线的宽度
+         ts_divideColor:      分割线的颜色
+     -->
+    <declare-styleable name="TabSegmentView">
+        <attr name="ts_texts" format="string|reference" />
+        <attr name="ts_textSize" format="dimension|reference" />
+        <attr name="ts_textNormalColor" format="color|reference" />
+        <attr name="ts_textSelectColor" format="color|reference" />
+        <attr name="ts_radius" format="dimension|reference" />
+        <attr name="ts_normalColor" format="color|reference" />
+        <attr name="ts_selectColor" format="color|reference" />
+        <attr name="ts_textLeftRightGap" format="dimension|reference" />
+        <attr name="ts_textTopBottomGap" format="dimension|reference" />
+        <attr name="ts_defaultIndex" format="integer" />
+        <attr name="ts_divideWidth" format="dimension|reference" />
+        <attr name="ts_divideColor" format="dimension|reference" />
+    </declare-styleable>
+
     <declare-styleable name="AchievementView">
         <attr name="achievement_textColor" format="color|reference" />
         <attr name="achievement_textSize" format="dimension|reference" />

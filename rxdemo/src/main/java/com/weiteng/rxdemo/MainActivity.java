@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_rx_scan).setOnClickListener(this);
         findViewById(R.id.button_rx_merge).setOnClickListener(this);
         findViewById(R.id.button_rx_zip).setOnClickListener(this);
+        findViewById(R.id.button_rx_doc).setOnClickListener(this);
+        findViewById(R.id.button_rx_error).setOnClickListener(this);
     }
 
     @Override
@@ -115,6 +117,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.button_rx_zip:     // zip操作符
                 testZipOperator();
+                break;
+
+            case R.id.button_rx_doc:     // 辅助操作符测试
+                doOnCompleteTest();
+                break;
+
+            case R.id.button_rx_error:   // 辅助操作符测试
+                doOnErrorTest();
                 break;
         }
     }
@@ -383,7 +393,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 两次间隔执行的时间是 2 秒
     }
 
-    void demo2() {
+    /**
+     * 辅助操作符 doOnComplete 操作符
+     */
+    void doOnCompleteTest() {
 
         Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
 
@@ -393,11 +406,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Thread.sleep(1000);     // 模拟请求网络
                     String name = "teng";
                     subscriber.onNext(name);
+                    subscriber.onCompleted();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     subscriber.onError(e);
-                } finally {
-                    subscriber.onCompleted();
                 }
             }
         });
@@ -405,25 +417,96 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        toast("onStart()");
+                        Log.d(TAG, "doOnSubscribe");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "doOnCompleted");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        toast("onNext() name = " + s);
+                        Log.d(TAG, "onNext()");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        toast(throwable.getMessage());
+                        Log.d(TAG, "onError()");
+                        Log.d(TAG, "Error = " + throwable.getMessage());
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
-                        toast("complete");
+                        Log.d(TAG, "onComplete");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                });
+    }
+
+    /**
+     * 辅助操作符 doOnError 操作符
+     */
+    void doOnErrorTest() {
+
+        Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
+
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                try {
+                    Thread.sleep(1000);     // 模拟请求网络
+                    String name = "teng";
+                    subscriber.onNext(name);
+                    subscriber.onCompleted();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    subscriber.onError(e);
+                }
+            }
+        });
+        observable.subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "doOnSubscribe");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.d(TAG, "doOnError_ e = " + throwable.getMessage());
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.d(TAG, "onNext()");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.d(TAG, "onError()");
+                        Log.d(TAG, "Error = " + throwable.getMessage());
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "onComplete");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 });
     }

@@ -110,6 +110,22 @@
             android:text="zip操作符"
             android:id="@+id/button_rx_zip" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:text="doOnComplete辅助操作符"
+            android:id="@+id/button_rx_doc" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:text="doOnError辅助操作符"
+            android:id="@+id/button_rx_error" />
+
     </LinearLayout>
 
 </LinearLayout>
