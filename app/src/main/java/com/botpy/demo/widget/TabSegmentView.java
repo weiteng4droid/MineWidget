@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -60,7 +59,6 @@ public class TabSegmentView extends View {
     private Path mItemPath;
 
     private float mTextOffsetY;
-    private float mPercent = 0.06f;
 
     private double mDegree = Math.PI / 18;
 
@@ -355,7 +353,9 @@ public class TabSegmentView extends View {
         }
     }
 
-
+    /**
+     * 创建最左边 item 的路径背景
+     */
     private void createLeftItemPath() {
         Rect rect = mCacheBounds[0];
         mItemPath = new Path();
@@ -371,30 +371,49 @@ public class TabSegmentView extends View {
         mItemPath.close();
     }
 
+    /**
+     * 计算梯形边角扫过的圆角
+     */
     private float sweepAngle() {
         return (float) ((Math.PI / 2 - mDegree) * (180 / Math.PI));
     }
 
+    /**
+     * 计算右边梯形圆角圆弧的矩形区域
+     */
     private RectF createRightAcrRectF(Rect rect) {
         float left = (float) (rect.right - Math.tan(Math.PI / 4 + mDegree / 2) * mRadius - mRadius);
         float right = (float) (rect.right - Math.tan(Math.PI / 4 + mDegree / 2) * mRadius + mRadius);
         return new RectF(left, rect.top, right, rect.top + 2 * mRadius);
     }
 
+
+    /**
+     * 计算左边梯形圆角圆弧的矩形区域
+     */
     private RectF createLeftAcrRectF(Rect rect) {
         float left = (float) (rect.left -(mRadius - Math.tan(Math.PI / 4 - mDegree / 2) * mRadius));
         float right = (float) (rect.left + Math.tan(Math.PI / 4 - mDegree / 2) * mRadius + mRadius);
         return new RectF(left, rect.top, right, rect.top + 2 * mRadius);
     }
 
+    /**
+     * 计算腰部连接圆弧的点的X坐标
+     */
     private float createWaistX(Rect rect) {
         return (float) (rect.left - (Math.cos(mDegree) * mRadius - Math.tan(Math.PI / 4 - mDegree / 2) * mRadius));
     }
 
+    /**
+     * 计算腰部连接圆弧的点的Y坐标
+     */
     private float createWaistY(Rect rect) {
         return (float) (rect.top + (mRadius - Math.sin(mDegree) * mRadius));
     }
 
+    /**
+     * 创建最右边 item 的路径背景
+     */
     private void createRightItemPath() {
         Rect rect = mCacheBounds[mTexts.length - 1];
         mItemPath = new Path();
@@ -410,6 +429,9 @@ public class TabSegmentView extends View {
         mItemPath.close();
     }
 
+    /**
+     * 创建中间 item 的路径背景
+     */
     private void createCenterItemPath(int index) {
         Rect rect = mCacheBounds[index];
         mItemPath = new Path();
