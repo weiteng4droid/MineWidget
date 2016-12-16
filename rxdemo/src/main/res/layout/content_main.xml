@@ -114,22 +114,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="模拟定时器1"
-            android:id="@+id/button_rx_timer1" />
+            android:textSize="12sp"
+            android:text="doOnComplete辅助操作符"
+            android:id="@+id/button_rx_doc" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="模拟定时器2"
-            android:id="@+id/button_rx_timer2" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="模拟定时器3"
-            android:id="@+id/button_rx_timer3" />
+            android:textSize="12sp"
+            android:text="doOnError辅助操作符"
+            android:id="@+id/button_rx_error" />
 
     </LinearLayout>
 

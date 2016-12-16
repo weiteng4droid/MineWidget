@@ -62,9 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_rx_scan).setOnClickListener(this);
         findViewById(R.id.button_rx_merge).setOnClickListener(this);
         findViewById(R.id.button_rx_zip).setOnClickListener(this);
-        findViewById(R.id.button_rx_timer1).setOnClickListener(this);
-        findViewById(R.id.button_rx_timer2).setOnClickListener(this);
-        findViewById(R.id.button_rx_timer3).setOnClickListener(this);
+        findViewById(R.id.button_rx_doc).setOnClickListener(this);
+        findViewById(R.id.button_rx_error).setOnClickListener(this);
     }
 
     @Override
@@ -120,16 +119,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 testZipOperator();
                 break;
 
-            case R.id.button_rx_timer1:  // 模拟定时器1
-                simulateTimer1();
+            case R.id.button_rx_doc:     // 辅助操作符测试
+                doOnCompleteTest();
                 break;
 
-            case R.id.button_rx_timer2:  // 模拟定时器2
-                simulateTimer2();
-                break;
-
-            case R.id.button_rx_timer3:  // 模拟定时器3
-                simulateTimer3();
+            case R.id.button_rx_error:   // 辅助操作符测试
+                doOnErrorTest();
                 break;
         }
     }
@@ -381,27 +376,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void intervalDemo() {
         // 需要一个重复执行的Observable
-        Observable.interval(1, TimeUnit.SECONDS)
-                .take(20)
+        Observable.interval(2, TimeUnit.MICROSECONDS, AndroidSchedulers.mainThread())
+                .take(10)           // 取用前10个
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
-                        Log.d(TAG, "long = " + aLong);
+                        toast("time is " + aLong);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        Log.d(TAG, "throwable = " + throwable.getMessage());
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        Log.d(TAG, "轮询完成");
+                        toast("error occur " + throwable.getMessage());
                     }
                 });
+
+        // 两次间隔执行的时间是 2 秒
     }
 
-    void demo2() {
+    /**
+     * 辅助操作符 doOnComplete 操作符
+     */
+    void doOnCompleteTest() {
 
         Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
 
@@ -411,11 +406,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Thread.sleep(1000);     // 模拟请求网络
                     String name = "teng";
                     subscriber.onNext(name);
+                    subscriber.onCompleted();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     subscriber.onError(e);
-                } finally {
-                    subscriber.onCompleted();
                 }
             }
         });
@@ -423,25 +417,96 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .doOnSubscribe(new Action0() {
                     @Override
                     public void call() {
-                        toast("onStart()");
+                        Log.d(TAG, "doOnSubscribe");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "doOnCompleted");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        toast("onNext() name = " + s);
+                        Log.d(TAG, "onNext()");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        toast(throwable.getMessage());
+                        Log.d(TAG, "onError()");
+                        Log.d(TAG, "Error = " + throwable.getMessage());
                     }
                 }, new Action0() {
                     @Override
                     public void call() {
-                        toast("complete");
+                        Log.d(TAG, "onComplete");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                });
+    }
+
+    /**
+     * 辅助操作符 doOnError 操作符
+     */
+    void doOnErrorTest() {
+
+        Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
+
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                try {
+                    Thread.sleep(1000);     // 模拟请求网络
+                    String name = "teng";
+                    subscriber.onNext(name);
+                    subscriber.onCompleted();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    subscriber.onError(e);
+                }
+            }
+        });
+        observable.subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "doOnSubscribe");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.d(TAG, "doOnError_ e = " + throwable.getMessage());
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.d(TAG, "onNext()");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.d(TAG, "onError()");
+                        Log.d(TAG, "Error = " + throwable.getMessage());
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "onComplete");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 });
     }
@@ -676,72 +741,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-    }
-
-    /**
-     * 使用RxJava 模拟定时器
-     *
-     * 备注：使用 interval 操作符 + take操作符，保留个数
-     */
-    private void simulateTimer1() {
-        Observable
-                .interval(1, TimeUnit.SECONDS)
-                .take(60)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        int value = aLong.intValue();
-                        Log.d(TAG, "time = " + value);
-                        Toast.makeText(MainActivity.this, String.valueOf(value), Toast.LENGTH_SHORT).show();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-                        Log.d(TAG, "onCompleted");
-                    }
-                });
-    }
-
-    /**
-     * 使用RxJava 模拟定时器
-     *
-     * 备注：使用 range 操作符 + timer 操作符, 该实现方式有问题，无法实现
-     */
-    private void simulateTimer2() {
-        Observable
-                .range(0, 59)
-                .timer(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        int value = aLong.intValue();
-                        Toast.makeText(MainActivity.this, String.valueOf(value), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    /**
-     * 使用RxJava 模拟定时器
-     *
-     * 备注：使用 range 操作符 + delay 操作符
-     */
-    private void simulateTimer3() {
-        Observable
-                .range(0, 59)
-                .delay(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer value) {
-                        Log.d(TAG, "time = " + value);
-                        Toast.makeText(MainActivity.this, String.valueOf(value), Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 }

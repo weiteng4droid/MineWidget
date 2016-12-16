@@ -4,6 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="#f3c3f3"
               android:orientation="vertical">
 
 
@@ -30,7 +31,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="10dp"
         app:liked="false"
         app:state_drawables="@drawable/star_selector" />
 
@@ -61,5 +62,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="显示对话框"/>
+
+    <com.botpy.demo.widget.TabSegmentView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        app:ts_radius="5dp"
+        app:ts_textTopBottomGap="10dp"
+        app:ts_textNormalColor="#9a9a9a"
+        app:ts_textSelectColor="#3b4245"
+        app:ts_normalColor="#f5f5f5"
+        app:ts_selectColor="#fff"
+        app:ts_texts="按车牌号|按车架号|按保单号|按人品查询"/>
 
 </LinearLayout>
