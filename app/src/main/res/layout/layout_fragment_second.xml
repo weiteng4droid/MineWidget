@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="获取缓存"/>
-    -->
+
 
     <TextView
         android:id="@+id/word_label"
@@ -50,5 +50,11 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         app:index_text_gap="5dp"/>
+    -->
+
+    <com.botpy.demo.widget.SpinnerView
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

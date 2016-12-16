@@ -110,6 +110,27 @@
             android:text="zip操作符"
             android:id="@+id/button_rx_zip" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="模拟定时器1"
+            android:id="@+id/button_rx_timer1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="模拟定时器2"
+            android:id="@+id/button_rx_timer2" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="模拟定时器3"
+            android:id="@+id/button_rx_timer3" />
+
     </LinearLayout>
 
 </LinearLayout>

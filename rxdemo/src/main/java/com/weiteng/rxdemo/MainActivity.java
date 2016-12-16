@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_rx_scan).setOnClickListener(this);
         findViewById(R.id.button_rx_merge).setOnClickListener(this);
         findViewById(R.id.button_rx_zip).setOnClickListener(this);
+        findViewById(R.id.button_rx_timer1).setOnClickListener(this);
+        findViewById(R.id.button_rx_timer2).setOnClickListener(this);
+        findViewById(R.id.button_rx_timer3).setOnClickListener(this);
     }
 
     @Override
@@ -115,6 +118,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.button_rx_zip:     // zip操作符
                 testZipOperator();
+                break;
+
+            case R.id.button_rx_timer1:  // 模拟定时器1
+                simulateTimer1();
+                break;
+
+            case R.id.button_rx_timer2:  // 模拟定时器2
+                simulateTimer2();
+                break;
+
+            case R.id.button_rx_timer3:  // 模拟定时器3
+                simulateTimer3();
                 break;
         }
     }
@@ -366,21 +381,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void intervalDemo() {
         // 需要一个重复执行的Observable
-        Observable.interval(2, TimeUnit.MICROSECONDS, AndroidSchedulers.mainThread())
-                .take(10)           // 取用前10个
+        Observable.interval(1, TimeUnit.SECONDS)
+                .take(20)
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
-                        toast("time is " + aLong);
+                        Log.d(TAG, "long = " + aLong);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        toast("error occur " + throwable.getMessage());
+                        Log.d(TAG, "throwable = " + throwable.getMessage());
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "轮询完成");
                     }
                 });
-
-        // 两次间隔执行的时间是 2 秒
     }
 
     void demo2() {
@@ -658,5 +676,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
+    }
+
+    /**
+     * 使用RxJava 模拟定时器
+     *
+     * 备注：使用 interval 操作符 + take操作符，保留个数
+     */
+    private void simulateTimer1() {
+        Observable
+                .interval(1, TimeUnit.SECONDS)
+                .take(60)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        int value = aLong.intValue();
+                        Log.d(TAG, "time = " + value);
+                        Toast.makeText(MainActivity.this, String.valueOf(value), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "onCompleted");
+                    }
+                });
+    }
+
+    /**
+     * 使用RxJava 模拟定时器
+     *
+     * 备注：使用 range 操作符 + timer 操作符, 该实现方式有问题，无法实现
+     */
+    private void simulateTimer2() {
+        Observable
+                .range(0, 59)
+                .timer(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        int value = aLong.intValue();
+                        Toast.makeText(MainActivity.this, String.valueOf(value), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    /**
+     * 使用RxJava 模拟定时器
+     *
+     * 备注：使用 range 操作符 + delay 操作符
+     */
+    private void simulateTimer3() {
+        Observable
+                .range(0, 59)
+                .delay(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer value) {
+                        Log.d(TAG, "time = " + value);
+                        Toast.makeText(MainActivity.this, String.valueOf(value), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

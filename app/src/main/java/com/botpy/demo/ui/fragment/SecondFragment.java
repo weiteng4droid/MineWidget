@@ -17,13 +17,13 @@ import butterknife.InjectView;
 public class SecondFragment extends BaseFragment {
 
     private static final String TAG = "SecondFragment";
-
+    /*
     @InjectView(R.id.word_label)
     TextView mHintLabel;
 
     @InjectView(R.id.quick_index_view)
     QuickIndexView mIndexView;
-
+    */
     /*
     @InjectView(R.id.put_cache_btn)
     Button mCacheButton;
@@ -42,6 +42,7 @@ public class SecondFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
+        /*
         mIndexView.setShowLabel(mHintLabel);
         mIndexView.setOnQuickIndexListener(new QuickIndexView.OnQuickIndexListener() {
 
@@ -50,6 +51,7 @@ public class SecondFragment extends BaseFragment {
                 Log.d(TAG, "index = " + index + ", word = " + word);
             }
         });
+        */
     }
 
     @Override

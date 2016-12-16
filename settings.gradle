@@ -1,1 +1,1 @@
-include ':app', ':cache', ':rxdemo', ':pickerview', ':pickviewdemo'
+include ':app', ':cache', ':rxdemo', ':pickerview', ':pickviewdemo', ':compressimage'

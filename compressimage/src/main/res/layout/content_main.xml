@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/content_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.weiteng.image.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="压缩前" />
+
+    <ImageView
+        android:id="@+id/pre_compress"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/app_name"/>
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/pre_compress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="压缩后" />
+
+        <ImageView
+            android:id="@+id/after_compress"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/app_name"/>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/display_company_pb"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:indeterminateDrawable="@drawable/huaban_progress"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+</RelativeLayout>

@@ -62,8 +62,8 @@ public class HorizontalSlideLayout extends ViewGroup {
 
         int hiddenMeasureSpec = MeasureSpec.makeMeasureSpec(layoutParams.width, MeasureSpec.EXACTLY);
 
-        mContentLayout.measure(widthMeasureSpec, heightMeasureSpec);
-        mHiddenLayout.measure(hiddenMeasureSpec, heightMeasureSpec);
+        measureChild(mContentLayout, widthMeasureSpec, heightMeasureSpec);
+        measureChild(mHiddenLayout, hiddenMeasureSpec, heightMeasureSpec);
     }
 
     @Override
