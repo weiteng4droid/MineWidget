@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements PhotoHelper.OnIma
     private String compressImage(String pathName) {
         byte[] bytes = Luban.get()
                 .load(new File(pathName))
-                .putGear(Luban.THIRD_GEAR)
+                .putGear(Luban.FIRST_GEAR)
                 .launch();
 
         String fileName = UUID.randomUUID().toString() + ".jpg";

@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 public class Luban {
 
-    private static final int FIRST_GEAR = 1;
+    public static final int FIRST_GEAR = 1;
     public static final int THIRD_GEAR = 3;
 
     private static final String TAG = "Luban";
@@ -118,8 +118,8 @@ public class Luban {
     }
 
     private byte[] firstCompress(@NonNull File file) {
-        int minSize = 60;
-        int longSide = 720;
+        int minSize = 80;
+        int longSide = 960;
         int shortSide = 1280;
 
         String filePath = file.getAbsolutePath();
@@ -312,7 +312,7 @@ public class Luban {
         int options = 100;
         bitmap.compress(Bitmap.CompressFormat.JPEG, options, stream);
 
-        while (stream.toByteArray().length / 1024 > size && options > 34) {
+        while (stream.toByteArray().length / 1024 > size && options > 28) {
             stream.reset();
             options -= 6;
             bitmap.compress(Bitmap.CompressFormat.JPEG, options, stream);

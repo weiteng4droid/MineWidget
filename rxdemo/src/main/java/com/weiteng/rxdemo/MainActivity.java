@@ -3,6 +3,7 @@ package com.weiteng.rxdemo;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Context mContext;
     private Button basicButton;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setAction("Action", null).show();
             }
         });
+
         basicButton = (Button) findViewById(R.id.button_rx_basic);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         basicButton.setOnClickListener(this);
         findViewById(R.id.button_rx_convert).setOnClickListener(this);
         findViewById(R.id.button_rx_just).setOnClickListener(this);
@@ -64,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_rx_zip).setOnClickListener(this);
         findViewById(R.id.button_rx_doc).setOnClickListener(this);
         findViewById(R.id.button_rx_error).setOnClickListener(this);
+        findViewById(R.id.button_rx_analog).setOnClickListener(this);
     }
 
     @Override
@@ -125,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.button_rx_error:   // 辅助操作符测试
                 doOnErrorTest();
+                break;
+
+            case R.id.button_rx_analog:  // 模拟进度
+                analogProgress();
                 break;
         }
     }
@@ -358,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     void timerDemo() {
         // 如果你需要一个一段时间之后才发射的Observable，你可以像下面的例子使用timer()：
-        Observable.timer(1, TimeUnit.MICROSECONDS, AndroidSchedulers.mainThread())
+        Observable.timer(3, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
@@ -427,6 +438,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void call() {
                         Log.d(TAG, "doOnCompleted");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                /*
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        Log.d(TAG, "doOnTerminate");
+                        Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
+                    }
+                })
+                */
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.d(TAG, "doOnError_ e = " + throwable.getMessage());
                         Log.d(TAG, "thread_name = " + Thread.currentThread().getName());
                     }
                 })
@@ -741,5 +770,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
+    }
+
+    private void analogProgress() {
+        Observable
+                .interval(20, TimeUnit.MILLISECONDS)
+                .take(100 * 5)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        handleProgress(aLong);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {}
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        handleTimeout();
+                    }
+                });
+    }
+
+    private void handleProgress(Long aLong) {
+        int second = aLong.intValue();
+        Log.d(TAG, "second = " + second);
+
+        int originProgress = mProgressBar.getProgress();
+        if (originProgress != second) {
+            mProgressBar.setProgress(second);
+        }
+
+        int progress = (int)(second * 1.0 / mProgressBar.getMax() * 100);
+        Log.d(TAG, "progress = " + progress);
+    }
+
+    private void handleTimeout() {
+//        mProgressBar.setProgress(0);
+    }
+
+    private void analogProgressByCountDownTimer() {
+        CountDownTimer downTimer = new CountDownTimer(10 * 1000, 400) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                System.out.print("millisUntilFinished = " + millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                System.out.print("onFinish");
+            }
+        };
+        downTimer.start();
     }
 }
